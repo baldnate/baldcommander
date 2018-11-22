@@ -8,11 +8,11 @@
     "install": "electron-rebuild"
   },
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "obs",
+    "serial",
+    "streaming",
+    "automation",
+    "electron"
   ],
   "author": "baldnate",
   "license": "CC0-1.0",
