@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>baldcommander</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>Switch</td>
+        <td>
+          <button class="button" id="vidnes">NES</button>
+        </td>
+        <td>
+          <button class="button" id="vidn64">N64</button>
+        </td>
+        <td>
+          <button class="button" id="vidgen">Gen/32X</button>
+        </td>
+        <td>
+          <button class="button" id="vidtg">TG-16</button>
+        </td>
+      </tr>      
+      <tr>
+        <td>Mic</td>
+        <td>
+          <button class="button" id="micMute">Mute</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Scene</td>
+        <td>
+          <button class="button" id="sceneMain">Main</button>
+        </td>
+        <td>
+          <button class="button" id="sceneWaffleIron">Waffle Iron</button>
+        </td>
+        <td>
+          <button class="button" id="sceneBRB">BRB</button>
+        </td>
+      </tr>
+    </table>
+
+
+
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+  </body>
+</html>

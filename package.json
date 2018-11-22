@@ -1,0 +1,27 @@
+{
+  "name": "baldcommander",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "install": "electron-rebuild"
+  },
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "baldnate",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^3.0.4",
+    "electron-rebuild": "^1.8.2"
+  },
+  "dependencies": {
+    "obs-websocket-js": "^1.2.0",
+    "serialport": "^7.0.2"
+  }
+}

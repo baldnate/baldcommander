@@ -1,0 +1,45 @@
+html {
+  font-family: Open Sans;
+}
+
+body {
+  background-color: #2f3136;
+  color: #f8f8f2;
+  font-size: 16px;
+}
+
+.button {
+    font-family: Open Sans;
+    background-color: #42433e;
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 100px;
+}
+
+.solidGreenBG {
+    background-color: #63bb07;
+}
+
+.pulsingRedBG {
+    background-color: #ff0000;
+    animation-name: color;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes color {
+  0% {
+    background-color: #ff0000;
+  }
+  50% {
+    background-color: #42433e;
+  }
+  100 {
+    background-color: #ff0000;
+  }
+}
