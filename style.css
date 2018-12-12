@@ -3,14 +3,29 @@ html {
 }
 
 body {
-  background-color: #2f3136;
+  background-color: #36393f;
   color: #f8f8f2;
   font-size: 16px;
+  -webkit-user-select: none;
 }
 
 .button {
     font-family: Open Sans;
-    background-color: #42433e;
+    background-color: #24252a;
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 110px;
+    outline: none;
+}
+
+.textbox {
+    font-family: Open Sans;
+    background-color: #484b51;
     border: none;
     color: white;
     padding: 5px 5px;
@@ -19,10 +34,15 @@ body {
     display: inline-block;
     font-size: 16px;
     width: 100px;
+    outline: none;
 }
 
+.button:hover {background-color: #1e5e21}
+
+
+
 .solidGreenBG {
-    background-color: #63bb07;
+    background-color: #3e8e41;
 }
 
 .pulsingRedBG {
@@ -37,7 +57,7 @@ body {
     background-color: #ff0000;
   }
   50% {
-    background-color: #42433e;
+    background-color: #3e8e41;
   }
   100 {
     background-color: #ff0000;

@@ -2,6 +2,14 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+document.addEventListener("keydown", function (e) {
+	if (e.which === 123) {
+		require('electron').remote.getCurrentWindow().toggleDevTools();
+	} else if (e.which === 116) {
+		location.reload();
+	}
+});
+
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 const port = new SerialPort('COM5', {baudRate: 9600})
@@ -19,9 +27,27 @@ function sendCommand(command) {
 	})
 }
 
+function sendCommands(commandList) {
+	for (var i = 0; i < commandList.length; i++) {
+		sendCommand(commandList[i])
+	}
+}
+
 const OBSWebSocket = require('obs-websocket-js')
 const obs = new OBSWebSocket()
 obs.connect()
+
+obs.on('error', err => {
+	console.error('socket error:', err);
+});
+
+obs.onStreamStatus(data => {
+	console.log(data);
+})
+
+obs.onSwitchScenes(data => {
+	console.log(`New Active Scene: ${data.sceneName}`);
+})
 
 function switchScene(sceneName) {
 	console.log('Switching scene to ', sceneName)
@@ -29,13 +55,36 @@ function switchScene(sceneName) {
 }
 
 function registerScene(sceneData) {
-	document.querySelector(sceneData['button']).addEventListener('click', function(){
-		switchScene(sceneData['scene'])
-	})	
+	document.querySelector(sceneData['button']).addEventListener(
+		'click',
+		function() {
+			switchScene(sceneData['scene'])
+		}
+	)
 }
 
-function toggleMute(source, button) {
-	obs.toggleMute({'source': source})
+function updateButton(button, state, trueStyle, falseStyle) {
+	if (state) {
+		document.getElementById(button).className = trueStyle
+	} else {
+		document.getElementById(button).className = falseStyle
+	}
+}
+
+function toggleMute(source, button, mode = null) {
+	if (mode == null) {
+		obs.toggleMute({'source': source})
+	} else {
+		obs.setMute({'source': source, 'mute': (mode == true)})
+	}
+	response = obs.getMute({'source': source}).then(response => {
+		console.log(response)
+		updateButton(button, response['muted'], "button pulsingRedBG", "button")
+	})
+}
+
+function toggleStartRecording(source, button) {
+	obs.StartStopRecording()
 	response = obs.getMute({'source': source}).then(response => {
 		console.log(response)
 		if (response['muted']) {
@@ -47,18 +96,9 @@ function toggleMute(source, button) {
 }
 
 scenes = [
-	{
-		'scene': 'BRB',
-		'button': '#sceneBRB'
-	},
-	{
-		'scene': 'Main',
-		'button': '#sceneMain'
-	},
-	{
-		'scene': 'Waffle Iron',
-		'button': '#sceneWaffleIron'
-	}
+	{'scene': 'BRB',         'button': '#sceneBRB'},
+	{'scene': 'Main',        'button': '#sceneMain'},
+	{'scene': 'Waffle Iron', 'button': '#sceneWaffleIron'}
 ]
 
 for (var i = scenes.length - 1; i >= 0; i--) {
@@ -66,33 +106,59 @@ for (var i = scenes.length - 1; i >= 0; i--) {
 }
 
 switchports = [
-	{
-		'button': '#vidnes',
-		'command': '[MS3O01I01]'
-	},
-	{
-		'button': '#vidgen',
-		'command': '[MS3O01I03]'
-	},
-	{
-		'button': '#vidn64',
-		'command': '[MS3O01I04]'
-	},
-	{
-		'button': '#vidtg',
-		'command': '[MS3O01I02]'
-	},
+	{'button': '#vidnes',  'command': ['[MS3O01I01]']},
+	{'button': '#vidsnes', 'command': ['[MS3O01I04]', '[MS2O01I03]']},
+	{'button': '#vidpsx',  'command': ['[MS3O01I04]', '[MS2O01I04]']},
+	{'button': '#vidgen',  'command': ['[MS3O01I03]']},
+	{'button': '#vidn64',  'command': ['[MS3O01I04]', '[MS2O01I02]']},
+	{'button': '#viddc',   'command': ['[MS3O01I04]', '[MS2O01I01]']},
+	{'button': '#vidtg',   'command': ['[MS3O01I02]']}
 ]
 
 function registerSwitchPort(portData) {
-	document.querySelector(portData['button']).addEventListener('click', function(){
-		sendCommand(portData['command'])
-	})		
+	document.querySelector(portData['button']).addEventListener (
+		'click',
+		function() {
+			sendCommands(portData['command'])
+		}
+	)
 }
 
 for (var i = switchports.length - 1; i >= 0; i--) {
 	registerSwitchPort(switchports[i])
 }
 
+nateMuted = false
+function muteNate() {
+	nateMuted = !nateMuted
+	toggleMute('VM B1 - Mics', 'nateMute', nateMuted)
+	obs.setSceneItemProperties(
+		{
+			'scene-name':'Main',
+			'item': 'fancy cam',
+			'visible': !nateMuted
+		}
+	)
+}
 
-document.querySelector('#micMute').addEventListener('click', function(){toggleMute('VM B1 - Mics', 'micMute')})
+document.querySelector('#nateMute').addEventListener (
+	'click',
+	function() {
+		muteNate()
+	}
+)
+
+document.querySelector('#switchMute').addEventListener (
+	'click',
+	function() {
+		sendCommand('[MUTE]')
+	}
+)
+
+document.querySelector('#serialSend').addEventListener (
+	'click',
+	function() {
+		sendCommand('[MUTE]')
+	}
+)
+
