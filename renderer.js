@@ -12,7 +12,7 @@ document.addEventListener("keydown", function (e) {
 
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-const port = new SerialPort('COM5', {baudRate: 9600})
+const port = new SerialPort('COM3', {baudRate: 9600})
 
 
 const parser = port.pipe(new Readline({ delimiter: '\n' }))
@@ -107,12 +107,12 @@ for (var i = scenes.length - 1; i >= 0; i--) {
 
 switchports = [
 	{'button': '#vidnes',  'command': ['[MS3O01I01]']},
-	{'button': '#vidsnes', 'command': ['[MS3O01I04]', '[MS2O01I03]']},
-	{'button': '#vidpsx',  'command': ['[MS3O01I04]', '[MS2O01I04]']},
+	{'button': '#vidsnes', 'command': ['[MS2O01I03]']},
+	{'button': '#vidpsx',  'command': ['[MS2O01I04]']},
 	{'button': '#vidgen',  'command': ['[MS3O01I03]']},
-	{'button': '#vidn64',  'command': ['[MS3O01I04]', '[MS2O01I02]']},
-	{'button': '#viddc',   'command': ['[MS3O01I04]', '[MS2O01I01]']},
-	{'button': '#vidtg',   'command': ['[MS3O01I02]']}
+	{'button': '#vidn64',  'command': ['[MS2O01I02]']},
+	{'button': '#viddc',   'command': ['[MS2O01I01]']},
+	{'button': '#vidtg',   'command': ['[MS3O01I04]']}
 ]
 
 function registerSwitchPort(portData) {
@@ -139,6 +139,13 @@ function muteNate() {
 			'visible': !nateMuted
 		}
 	)
+	obs.setSceneItemProperties(
+		{
+			'scene-name':'raffle time',
+			'item': 'fancy cam',
+			'visible': !nateMuted
+		}
+	)
 }
 
 document.querySelector('#nateMute').addEventListener (
@@ -160,5 +167,23 @@ document.querySelector('#serialSend').addEventListener (
 	function() {
 		sendCommand('[MUTE]')
 	}
+)
+
+//// switch init ////
+
+// exclusive switching mode, audio follows video
+sendCommands(['[SMD1]','[AFV1]'])
+
+// set all the audio input trim levels
+sendCommands(
+	[
+		'[VIN06-180]', // n64
+		'[VIN07-110]', // snes
+		'[VIN09-035]', // nes
+		'[VIN11-140]', // gen
+		'[VIN12-000]', // tg16 (noisy audio path)
+		'[VIN05-150]', // dc
+		'[VIN08-135]'  // psx
+	]
 )
 
