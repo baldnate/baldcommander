@@ -1,14 +1,14 @@
 {
   "name": "baldcommander",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "version": "1.1.0",
+  "description": "baldnate's stream wrangling tool",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "install": "electron-rebuild",
-    "pack": "build --dir",
-    "dist": "build",
-    "postinstall": "install-app-deps"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [
     "obs",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "electron": "^7.1.2",
-    "electron-builder": "^20.44.4",
+    "electron-builder": "^22.2.0",
     "electron-rebuild": "^1.8.8"
   },
   "dependencies": {
