@@ -41,17 +41,17 @@ obs.on('error', err => {
 	console.error('socket error:', err);
 });
 
-obs.onStreamStatus(data => {
+obs.on('StreamStatus', data => {
 	console.log(data);
 })
 
-obs.onSwitchScenes(data => {
+obs.on('SwitchScenes', data => {
 	console.log(`New Active Scene: ${data.sceneName}`);
 })
 
 function switchScene(sceneName) {
 	console.log('Switching scene to ', sceneName)
-	obs.setCurrentScene({'scene-name': sceneName})
+	obs.send('SetCurrentScene', {'scene-name': sceneName})
 }
 
 function registerScene(sceneData) {
@@ -73,19 +73,19 @@ function updateButton(button, state, trueStyle, falseStyle) {
 
 function toggleMute(source, button, mode = null) {
 	if (mode == null) {
-		obs.toggleMute({'source': source})
+		obs.send('ToggleMute', {'source': source})
 	} else {
-		obs.setMute({'source': source, 'mute': (mode == true)})
+		obs.send('SetMute' , {'source': source, 'mute': (mode == true)})
 	}
-	response = obs.getMute({'source': source}).then(response => {
+	response = obs.send('GetMute', {'source': source}).then(response => {
 		console.log(response)
 		updateButton(button, response['muted'], "button pulsingRedBG", "button")
 	})
 }
 
 function toggleStartRecording(source, button) {
-	obs.StartStopRecording()
-	response = obs.getMute({'source': source}).then(response => {
+	obs.send('StartStopRecording')
+	response = obs.send('GetMute', {'source': source}).then(response => {
 		console.log(response)
 		if (response['muted']) {
 			document.getElementById(button).className = "button pulsingRedBG"
@@ -96,23 +96,26 @@ function toggleStartRecording(source, button) {
 }
 
 scenes = [
-	{'scene': 'BRB',         'button': '#sceneBRB'},
-	{'scene': 'Main',        'button': '#sceneMain'},
-	{'scene': 'Waffle Iron', 'button': '#sceneWaffleIron'}
+	{'scene': 'brb',   'button': '#sceneBRB'},
+	{'scene': 'Main',  'button': '#sceneMain'},
+	{'scene': 'outro', 'button': '#sceneWaffleIron'}
 ]
 
 for (var i = scenes.length - 1; i >= 0; i--) {
 	registerScene(scenes[i])
 }
 
-switchports = [
-	{'button': '#vidnes',  'command': ['[MS3O01I01]']},
-	{'button': '#vidsnes', 'command': ['[MS2O01I03]']},
-	{'button': '#vidpsx',  'command': ['[MS2O01I04]']},
-	{'button': '#vidgen',  'command': ['[MS3O01I03]']},
-	{'button': '#vidn64',  'command': ['[MS2O01I02]']},
-	{'button': '#viddc',   'command': ['[MS2O01I01]']},
-	{'button': '#vidtg',   'command': ['[MS3O01I04]']}
+// crop order: top, bottom, left, right
+
+switchData = [
+	{'button': '#vidnes',  'command': ['[MS3O01I01]'], 'crop': [ 0,  4,  39,  28]},
+	{'button': '#vidsnes', 'command': ['[MS2O01I03]'], 'crop': [ 0,  4,  36,  32]},
+	{'button': '#vidsgb',  'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]},
+	{'button': '#vidpsx',  'command': ['[MS2O01I04]'], 'crop': [0,0,0,0]},
+	{'button': '#vidgen',  'command': ['[MS3O01I03]'], 'crop': [0,0,0,0]},
+	{'button': '#vidn64',  'command': ['[MS2O01I02]'], 'crop': [0,0,0,0]},
+	{'button': '#viddc',   'command': ['[MS2O01I01]'], 'crop': [0,0,0,0]},
+	{'button': '#vidtg',   'command': ['[MS3O01I04]'], 'crop': [0,0,0,0]}
 ]
 
 function registerSwitchPort(portData) {
@@ -120,26 +123,46 @@ function registerSwitchPort(portData) {
 		'click',
 		function() {
 			sendCommands(portData['command'])
-		}
+			obs.send('SetSceneItemProperties',
+				{
+					'scene-name': 'Main',
+					'item': 'amarec_live',
+					'crop': {
+						'top': portData['crop'][0],
+						'bottom': portData['crop'][1],
+						'left': portData['crop'][2],
+						'right': portData['crop'][3]
+					}
+				}
+			)
+/*			response = obs.send('GetSceneItemProperties',
+				{
+					'scene-name': 'Main',
+					'item': 'amarec_live',
+				}
+			).then(response => {
+				console.log(response)
+			})
+*/		}
 	)
 }
 
-for (var i = switchports.length - 1; i >= 0; i--) {
-	registerSwitchPort(switchports[i])
+for (var i = switchData.length - 1; i >= 0; i--) {
+	registerSwitchPort(switchData[i])
 }
 
 nateMuted = false
 function muteNate() {
 	nateMuted = !nateMuted
 	toggleMute('VM B1 - Mics', 'nateMute', nateMuted)
-	obs.setSceneItemProperties(
+	obs.send('SetSceneItemProperties',
 		{
 			'scene-name':'Main',
 			'item': 'fancy cam',
 			'visible': !nateMuted
 		}
 	)
-	obs.setSceneItemProperties(
+	obs.send('SetSceneItemProperties',
 		{
 			'scene-name':'raffle time',
 			'item': 'fancy cam',
