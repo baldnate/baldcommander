@@ -20,13 +20,13 @@
   "author": "baldnate",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^3.0.4",
-    "electron-builder": "^20.39.0",
-    "electron-rebuild": "^1.8.4"
+    "electron": "^3.1.13",
+    "electron-builder": "^20.44.4",
+    "electron-rebuild": "^1.8.8"
   },
   "dependencies": {
     "obs-websocket-js": "^1.2.0",
-    "serialport": "^7.0.2"
+    "serialport": "^7.1.5"
   },
   "build": {
     "appId": "com.electron.baldcommander",
