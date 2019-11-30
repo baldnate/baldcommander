@@ -24,13 +24,13 @@
     "url": "https://github.com/baldnate/baldcommander.git"
   },
   "devDependencies": {
-    "electron": "^3.1.13",
+    "electron": "^7.1.2",
     "electron-builder": "^20.44.4",
     "electron-rebuild": "^1.8.8"
   },
   "dependencies": {
-    "obs-websocket-js": "^1.2.0",
-    "serialport": "^7.1.5"
+    "obs-websocket-js": "^3.1.0",
+    "serialport": "^8.0.5"
   },
   "build": {
     "appId": "com.electron.baldcommander",
