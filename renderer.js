@@ -105,17 +105,24 @@ for (var i = scenes.length - 1; i >= 0; i--) {
 	registerScene(scenes[i])
 }
 
-// crop order: top, bottom, left, right
-
+// crop order: [top, bottom, left, right]
 switchData = [
-	{'button': '#vidnes',  'command': ['[MS3O01I01]'], 'crop': [ 0,  4,  39,  28]},
-	{'button': '#vidsnes', 'command': ['[MS2O01I03]'], 'crop': [ 0,  4,  36,  32]},
-	{'button': '#vidsgb',  'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]},
-	{'button': '#vidpsx',  'command': ['[MS2O01I04]'], 'crop': [0,0,0,0]},
-	{'button': '#vidgen',  'command': ['[MS3O01I03]'], 'crop': [0,0,0,0]},
-	{'button': '#vidn64',  'command': ['[MS2O01I02]'], 'crop': [0,0,0,0]},
-	{'button': '#viddc',   'command': ['[MS2O01I01]'], 'crop': [0,0,0,0]},
-	{'button': '#vidtg',   'command': ['[MS3O01I04]'], 'crop': [0,0,0,0]}
+	// 240p
+	{'button': '#vidnes',  'command': ['[MS3O01I01]'], 'crop': [ 0,  4, 39, 28]},
+	{'button': '#vidsnes', 'command': ['[MS2O01I03]'], 'crop': [ 0,  4, 36, 32]},
+	{'button': '#vidpsx',  'command': ['[MS2O01I04]'], 'crop': [ 0,  4, 35, 34]},
+	{'button': '#vidgen',  'command': ['[MS3O01I03]'], 'crop': [18, 14, 40, 30]},
+	{'button': '#vidn64',  'command': ['[MS2O01I02]'], 'crop': [ 2,  4, 12, 12]},
+	{'button': '#viddc',   'command': ['[MS2O01I01]'], 'crop': [ 0,  4, 47, 25]},
+	{'button': '#vidtg',   'command': ['[MS3O01I04]'], 'crop': [ 4,  4, 33, 37]},
+
+	// 480i
+	{'button': '#vidpsx-480i', 'command': ['[MS2O01I04]'], 'crop': [27, 29, 36, 32]},
+	{'button': '#vidn64-480i', 'command': ['[MS2O01I02]'], 'crop': [28, 32, 12, 12]},
+	{'button': '#viddc-480i',  'command': ['[MS2O01I01]'], 'crop': [27, 29, 38, 34]},
+
+	// wierdo
+	{'button': '#vidsgb', 'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]}
 ]
 
 function registerSwitchPort(portData) {
@@ -179,13 +186,6 @@ document.querySelector('#nateMute').addEventListener (
 )
 
 document.querySelector('#switchMute').addEventListener (
-	'click',
-	function() {
-		sendCommand('[MUTE]')
-	}
-)
-
-document.querySelector('#serialSend').addEventListener (
 	'click',
 	function() {
 		sendCommand('[MUTE]')
