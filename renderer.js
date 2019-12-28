@@ -121,6 +121,9 @@ switchData = [
 	{'button': '#vidn64-480i', 'command': ['[MS2O01I02]'], 'crop': [28, 32, 12, 12]},
 	{'button': '#viddc-480i',  'command': ['[MS2O01I01]'], 'crop': [27, 29, 38, 34]},
 
+	// vcr
+	{'button': '#vidsms',  'command': ['[MS3O01I02]'], 'crop': [50, 46, 46, 40]},
+
 	// wierdo
 	{'button': '#vidsgb', 'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]}
 ]
