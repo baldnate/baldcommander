@@ -5,7 +5,6 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
@@ -24,12 +23,12 @@
     "url": "https://github.com/baldnate/baldcommander.git"
   },
   "devDependencies": {
-    "electron": "^7.1.2",
+    "electron": "^7.1.7",
     "electron-builder": "^22.2.0"
   },
   "dependencies": {
     "obs-websocket-js": "^3.1.0",
-    "serialport": "^8.0.5"
+    "serialport": "^8.0.6"
   },
   "build": {
     "appId": "com.electron.baldcommander",
