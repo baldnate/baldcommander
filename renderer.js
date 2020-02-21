@@ -107,25 +107,27 @@ for (var i = scenes.length - 1; i >= 0; i--) {
 
 // crop order: [top, bottom, left, right]
 switchData = [
-	// 240p
+	// 240p - comp
 	{'button': '#vidnes',  'command': ['[MS3O01I01]'], 'crop': [ 0,  4, 39, 28]},
-	{'button': '#vidsnes', 'command': ['[MS2O01I03]'], 'crop': [ 0,  4, 36, 32]},
-	{'button': '#vidpsx',  'command': ['[MS2O01I04]'], 'crop': [ 0,  4, 35, 34]},
 	{'button': '#vidgen',  'command': ['[MS3O01I03]'], 'crop': [18, 14, 40, 30]},
-	{'button': '#vidn64',  'command': ['[MS2O01I02]'], 'crop': [ 2,  4, 12, 12]},
-	{'button': '#viddc',   'command': ['[MS2O01I01]'], 'crop': [ 0,  4, 47, 25]},
 	{'button': '#vidtg',   'command': ['[MS3O01I04]'], 'crop': [ 4,  4, 33, 37]},
 
-	// 480i
+	// 240p - svid
+	{'button': '#vidsnes', 'command': ['[MS2O01I03]'], 'crop': [ 0,  4,  36,  32]},
+	{'button': '#vidsgb',  'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]},
+	{'button': '#vidpsx',  'command': ['[MS2O01I04]'], 'crop': [ 0,  4,  35,  34]},
+	{'button': '#vidn64',  'command': ['[MS2O01I02]'], 'crop': [ 2,  4,  12,  12]},	
+
+	// 480i - svid
 	{'button': '#vidpsx-480i', 'command': ['[MS2O01I04]'], 'crop': [27, 29, 36, 32]},
 	{'button': '#vidn64-480i', 'command': ['[MS2O01I02]'], 'crop': [28, 32, 12, 12]},
-	{'button': '#viddc-480i',  'command': ['[MS2O01I01]'], 'crop': [27, 29, 38, 34]},
 
-	// vcr
-	{'button': '#vidsms',  'command': ['[MS3O01I02]'], 'crop': [50, 46, 46, 40]},
+	// VGA
+	{'button': '#viddc',   'command': ['[MS1O01I03]'], 'crop': [ 0,  4,  47,  25]},
 
-	// wierdo
-	{'button': '#vidsgb', 'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]}
+	// vcr - comp
+	{'button': '#vidsms',  'command': ['[MS3O01I02]'], 'crop': [50, 46, 46, 40]}
+
 ]
 
 function registerSwitchPort(portData) {
@@ -208,7 +210,7 @@ sendCommands(
 		'[VIN09-035]', // nes
 		'[VIN11-140]', // gen
 		'[VIN12-000]', // tg16 (noisy audio path)
-		'[VIN05-150]', // dc
+		'[VIN05-150]', // dc - WRONG NOW, UPDATE TO VGA AUDIO BANK
 		'[VIN08-135]'  // psx
 	]
 )
