@@ -105,6 +105,26 @@ for (var i = scenes.length - 1; i >= 0; i--) {
 	registerScene(scenes[i])
 }
 
+function cvbs(port) {
+	return `[MS3O01I0${port}]`;
+}
+
+function svhs(port) {
+	return `[MS2O01I0${port}]`;
+}
+
+function vga(port) {
+	return `[MS1O01I0${port}]`;
+}
+
+function audio(port) {
+	return `[MS4O01I0${port}]`;
+}
+
+function swp123_blank_all() {
+	sendCommands([cvbs(0), svhs(0), vga(0), audio(0)]);
+}
+
 // crop order: [top, bottom, left, right]
 switchData = [
 	// 240p - comp
@@ -134,6 +154,7 @@ function registerSwitchPort(portData) {
 	document.querySelector(portData['button']).addEventListener (
 		'click',
 		function() {
+			swp123_blank_all();
 			sendCommands(portData['command'])
 			obs.send('SetSceneItemProperties',
 				{
