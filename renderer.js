@@ -180,6 +180,13 @@ for (var i = switchData.length - 1; i >= 0; i--) {
 	registerSwitchPort(switchData[i])
 }
 
+document.querySelector('#vid-blank').addEventListener(
+	'click',
+	function() {
+		swp123_blank_all();
+	}
+);
+
 nateMuted = false
 function muteNate() {
 	nateMuted = !nateMuted
