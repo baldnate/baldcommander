@@ -12,7 +12,7 @@ document.addEventListener("keydown", function (e) {
 
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-const port = new SerialPort('COM5', {baudRate: 9600})
+const port = new SerialPort('COM4', {baudRate: 9600})
 
 
 const parser = port.pipe(new Readline({ delimiter: '\n' }))
@@ -117,36 +117,32 @@ function vga(port) {
 	return `[MS1O01I0${port}]`;
 }
 
-function audio(port) {
-	return `[MS4O01I0${port}]`;
-}
-
 function swp123_blank_all() {
-	sendCommands([cvbs(0), svhs(0), vga(0), audio(0)]);
+	sendCommands([cvbs(0), svhs(0), vga(0)]);
 }
 
 // crop order: [top, bottom, left, right]
 switchData = [
 	// 240p - comp
-	{'button': '#vidnes',  'command': ['[MS3O01I01]'], 'crop': [ 0,  4, 39, 28]},
-	{'button': '#vidgen',  'command': ['[MS3O01I03]'], 'crop': [18, 14, 40, 30]},
-	{'button': '#vidtg',   'command': ['[MS3O01I04]'], 'crop': [ 4,  4, 33, 37]},
+	{'button': '#vidnes',  'command': [vga(4), cvbs(1)], 'crop': [ 0,  4, 39, 28]},
+	{'button': '#vidgen',  'command': [vga(4), cvbs(3)], 'crop': [18, 14, 40, 30]},
+	{'button': '#vidtg',   'command': [vga(4), cvbs(4)], 'crop': [ 4,  4, 33, 37]},
 
 	// 240p - svid
-	{'button': '#vidsnes', 'command': ['[MS2O01I03]'], 'crop': [ 0,  4,  36,  32]},
-	{'button': '#vidsgb',  'command': ['[MS2O01I03]'], 'crop': [94, 98, 143, 138]},
-	{'button': '#vidpsx',  'command': ['[MS2O01I04]'], 'crop': [ 0,  4,  35,  34]},
-	{'button': '#vidn64',  'command': ['[MS2O01I02]'], 'crop': [ 2,  4,  12,  12]},	
+	{'button': '#vidsnes', 'command': [vga(4), svhs(3)], 'crop': [ 0,  4,  36,  32]},
+	{'button': '#vidsgb',  'command': [vga(4), svhs(3)], 'crop': [94, 98, 143, 138]},
+	{'button': '#vidpsx',  'command': [vga(4), svhs(4)], 'crop': [ 0,  4,  35,  34]},
+	{'button': '#vidn64',  'command': [vga(4), svhs(2)], 'crop': [ 2,  4,  12,  12]},
 
 	// 480i - svid
-	{'button': '#vidpsx-480i', 'command': ['[MS2O01I04]'], 'crop': [27, 29, 36, 32]},
-	{'button': '#vidn64-480i', 'command': ['[MS2O01I02]'], 'crop': [28, 32, 12, 12]},
+	{'button': '#vidpsx-480i', 'command': [vga(4), svhs(4)], 'crop': [27, 29, 36, 32]},
+	{'button': '#vidn64-480i', 'command': [vga(4), svhs(2)], 'crop': [28, 32, 12, 12]},
 
 	// VGA
-	{'button': '#viddc',   'command': ['[MS1O01I03]'], 'crop': [ 0,  4,  47,  25]},
+	{'button': '#viddc',   'command': [vga(3)], 'crop': [ 0,  4,  47,  25]},
 
 	// vcr - comp
-	{'button': '#vidsms',  'command': ['[MS3O01I02]'], 'crop': [50, 46, 46, 40]}
+	{'button': '#vidsms',  'command': [vga(4), cvbs(2)], 'crop': [50, 46, 46, 40]}
 
 ]
 
@@ -220,8 +216,8 @@ document.querySelector('#switchMute').addEventListener (
 
 //// switch init ////
 
-// exclusive switching mode, audio follows video
-sendCommands(['[SMD1]','[AFV1]'])
+// separate switcher mode, audio follow video enabled
+sendCommands(['[SMD0]','[AFV1]'])
 
 // set all the audio input trim levels
 sendCommands(
