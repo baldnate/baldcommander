@@ -2,6 +2,62 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+class DVS304 {
+	constructor(ip) {
+		//http://192.168.1.200/nortxe_cmd.html?cmd=9%2A0%23
+		this.base_url = `http://${ip}/nortxe_cmd.html?cmd=`;
+	}
+
+	dvs_escape(text) {
+		var escaped_text = '';
+		for (var i = 0; i < text.length; i++) {
+			var char = text.charAt(i);
+			if (char.match(/[a-z0-9]/i)) {
+				escaped_text += char;
+			} else {
+				escaped_text += `%${char.charCodeAt(0).toString(16)}`;
+			}
+		}
+		return escaped_text;
+	}
+
+	build_url(command) {
+		return `${this.base_url}${this.dvs_escape(command)}`
+	}
+
+	cmd(command) {
+		var url = this.build_url(command);
+		console.log(url);
+		fetch(url)
+		.then(function(resp) {
+			if (resp.status != 200) {
+				console.log(resp);
+			}
+		});
+	}
+
+	cmds(commandList) {
+		this.cmd(commandList.join(''))
+	}
+
+	// cmds(commandList) {
+	// 	for (var i = 0; i < commandList.length; i++) {
+	// 		this.cmd(commandList[i])
+	// 	}
+	// }
+
+}
+
+dvs304 = new DVS304('192.168.1.200');
+
 document.addEventListener("keydown", function (e) {
 	if (e.which === 123) {
 		require('electron').remote.getCurrentWindow().toggleDevTools();
@@ -124,25 +180,53 @@ function swp123_blank_all() {
 // crop order: [top, bottom, left, right]
 switchData = [
 	// 240p - comp
-	{'button': '#vidnes',  'command': [vga(4), cvbs(1)], 'crop': [ 0,  4, 39, 28]},
-	{'button': '#vidgen',  'command': [vga(4), cvbs(3)], 'crop': [18, 14, 40, 30]},
-	{'button': '#vidtg',   'command': [vga(4), cvbs(4)], 'crop': [ 4,  4, 33, 37]},
+	{
+		'button': '#vidnes',
+		'dvs304': [
+			'9*0#',
+			'122)',
+			'12*600#',
+			'131(',
+			'13*480#',
+			'11*800#',
+			'42D'
+		],
+		'swp123': [vga(0), svhs(0), cvbs(1), vga(4), cvbs(1)],
+		'crop': [ 0,  4, 39, 28]
+	},
+	{
+		'button': '#vidgen',      'dvs304': ['9*0#'], 'swp123': [vga(4), cvbs(3)], 'crop': [18, 14, 40, 30]
+	},
+	{
+		'button': '#vidtg',
+		'dvs304': [
+			'9*0#',
+			'122)',
+			'12*596#',
+			'127(',
+			'13*474#',
+			'11*800#',
+			'42D'
+		],
+		'swp123': [vga(4), cvbs(4)],
+		'crop': [ 4,  4, 33, 37]
+	},
 
 	// 240p - svid
-	{'button': '#vidsnes', 'command': [vga(4), svhs(3)], 'crop': [ 0,  4,  36,  32]},
-	{'button': '#vidsgb',  'command': [vga(4), svhs(3)], 'crop': [94, 98, 143, 138]},
-	{'button': '#vidpsx',  'command': [vga(4), svhs(4)], 'crop': [ 0,  4,  35,  34]},
-	{'button': '#vidn64',  'command': [vga(4), svhs(2)], 'crop': [ 2,  4,  12,  12]},
+	{'button': '#vidsnes',     'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(3)], 'crop': [ 0,  4,  36,  32]},
+	{'button': '#vidsgb',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(3)], 'crop': [94, 98, 143, 138]},
+	{'button': '#vidpsx',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(4)], 'crop': [ 0,  4,  35,  34]},
+	{'button': '#vidn64',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(2)], 'crop': [ 2,  4,  12,  12]},
 
 	// 480i - svid
-	{'button': '#vidpsx-480i', 'command': [vga(4), svhs(4)], 'crop': [27, 29, 36, 32]},
-	{'button': '#vidn64-480i', 'command': [vga(4), svhs(2)], 'crop': [28, 32, 12, 12]},
+	{'button': '#vidpsx-480i', 'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(4)], 'crop': [27, 29, 36, 32]},
+	{'button': '#vidn64-480i', 'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(2)], 'crop': [28, 32, 12, 12]},
 
 	// VGA
-	{'button': '#viddc',   'command': [vga(3)], 'crop': [ 0,  4,  47,  25]},
+	{'button': '#viddc',       'dvs304': ['9*0#'], 'swp123': [vga(3)], 'crop': [ 0,  4,  47,  25]},
 
 	// vcr - comp
-	{'button': '#vidsms',  'command': [vga(4), cvbs(2)], 'crop': [50, 46, 46, 40]}
+	{'button': '#vidsms',      'dvs304': ['9*0#'], 'swp123': [vga(4), cvbs(2)], 'crop': [50, 46, 46, 40]}
 
 ]
 
@@ -150,8 +234,10 @@ function registerSwitchPort(portData) {
 	document.querySelector(portData['button']).addEventListener (
 		'click',
 		function() {
-			swp123_blank_all();
-			sendCommands(portData['command'])
+			//swp123_blank_all();
+			sendCommands(portData['swp123']);
+			sleep(500);
+			dvs304.cmds(portData['dvs304']);
 			obs.send('SetSceneItemProperties',
 				{
 					'scene-name': 'Main',
@@ -204,7 +290,7 @@ function muteNate() {
 			'item': 'fancy cam',
 			'visible': !nateMuted
 		}
-	)
+	);
 }
 
 document.querySelector('#nateMute').addEventListener (
@@ -212,19 +298,23 @@ document.querySelector('#nateMute').addEventListener (
 	function() {
 		muteNate()
 	}
-)
+);
 
 document.querySelector('#switchMute').addEventListener (
 	'click',
 	function() {
 		sendCommand('[MUTE]')
 	}
-)
+);
 
-//// switch init ////
+//// stack init ////
 
-// separate switcher mode, audio follow video enabled
-sendCommands(['[SMD0]','[AFV1]'])
+sendCommands(
+	[
+		'[SMD0]', // separate switcher mode
+		'[AFV1]'  // audio follow video enabled
+	]
+);
 
 // set all the audio input trim levels
 sendCommands(
@@ -237,5 +327,17 @@ sendCommands(
 		'[VIN05-150]', // dc - WRONG NOW, UPDATE TO VGA AUDIO BANK
 		'[VIN08-135]'  // psx
 	]
-)
+);
 
+// dvs304 global state
+dvs304.cmds(
+	[
+		'1X',    // executive mode enable
+		'52*1#', // enhanced mode enable (AGC on)
+		'1M',    // auto memory enable
+		'77*0#', // refresh lock
+		'55*0#', // auto image disable
+		'10*0#', // auto switch disable
+		''
+	]
+);
