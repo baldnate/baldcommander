@@ -201,10 +201,10 @@ switchData = [
 		'button': '#vidtg',
 		'dvs304': [
 			'9*0#',
-			'122)',
-			'12*596#',
-			'127(',
-			'13*474#',
+			'142)',
+			'12*624#',
+			'133(',
+			'13*480#',
 			'11*800#',
 			'42D'
 		],
@@ -240,7 +240,7 @@ function registerSwitchPort(portData) {
 			dvs304.cmds(portData['dvs304']);
 			obs.send('SetSceneItemProperties',
 				{
-					'scene-name': 'Main',
+					'scene-name': '4x3 frame',
 					'item': 'amarec_live',
 					'crop': {
 						'top': portData['crop'][0],
