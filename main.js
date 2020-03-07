@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron');
 
