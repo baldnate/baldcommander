@@ -183,6 +183,7 @@ switchData = [
 	{
 		'button': '#vidnes',
 		'dvs304': [
+			'4&',     // input select
 			'9*0#',
 			'122)',
 			'12*600#',
@@ -200,6 +201,7 @@ switchData = [
 	{
 		'button': '#vidtg',
 		'dvs304': [
+			'4&',     // input select
 			'9*0#',
 			'142)',
 			'12*624#',
@@ -208,22 +210,67 @@ switchData = [
 			'11*800#',
 			'42D'
 		],
-		'swp123': [vga(4), cvbs(4)],
+		'swp123': [vga(0), svhs(0), cvbs(4), vga(4), cvbs(4)],
 		'crop': [ 4,  4, 33, 37]
 	},
 
 	// 240p - svid
 	{'button': '#vidsnes',     'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(3)], 'crop': [ 0,  4,  36,  32]},
 	{'button': '#vidsgb',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(3)], 'crop': [94, 98, 143, 138]},
-	{'button': '#vidpsx',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(4)], 'crop': [ 0,  4,  35,  34]},
+	{
+		'button': '#vidpsx',
+		'dvs304': [
+			'4&',     // input select
+			'9*0#',   // aspect ratio
+			'124)',   // H start
+			'102(',   // V start
+			'11*807', // total pixels
+			'12*600', // active pixels
+			'13*450', // active lines
+			'127D',   // detail filter
+			'0U',     // pixel phase
+		],
+		'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
+		'crop': [ 0,  4,  35,  34]
+	},
 	{'button': '#vidn64',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(2)], 'crop': [ 2,  4,  12,  12]},
 
-	// 480i - svid
-	{'button': '#vidpsx-480i', 'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(4)], 'crop': [27, 29, 36, 32]},
+	// 480i - svid - through RT2X (old)
+	// {
+	// 	'button': '#vidpsx-480i-old',
+	// 	'dvs304': [
+	// 		'4&',     // input select
+	// 		'9*0#',   // aspect ratio
+	// 		'125)',   // H start
+	// 		'113(',   // V start
+	// 		'11*805', // total pixels
+	// 		'12*608', // active pixels
+	// 		'13*448', // active lines
+	// 		'127D',   // detail filter
+	// 		'0U',     // pixel phase
+	// 	],
+	// 	'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
+	// 	'crop': [27, 29, 36, 32]
+	// },
+	// 480i - svid - through DVS direct
+	{
+		'button': '#vidpsx-480i',
+		'dvs304': [
+			'3&',     // input select
+			'9*0#',   // aspect ratio
+			'57)',    // H start
+			'72(',    // V start
+			'12*647', // active pixels
+			'13*447', // active lines
+			'127D',   // detail filter
+		],
+		'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
+		'crop': [27, 29, 36, 32]
+	},
 	{'button': '#vidn64-480i', 'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(2)], 'crop': [28, 32, 12, 12]},
 
 	// VGA
-	{'button': '#viddc',       'dvs304': ['9*0#'], 'swp123': [vga(3)], 'crop': [ 0,  4,  47,  25]},
+	{'button': '#viddc',       'dvs304': ['9*0#'], 'swp123': [vga(0), cvbs(0), svhs(0), vga(3)], 'crop': [ 0,  4,  47,  25]},
 
 	// vcr - comp
 	{'button': '#vidsms',      'dvs304': ['9*0#'], 'swp123': [vga(4), cvbs(2)], 'crop': [50, 46, 46, 40]}
@@ -243,10 +290,10 @@ function registerSwitchPort(portData) {
 					'scene-name': '4x3 frame',
 					'item': 'amarec_live',
 					'crop': {
-						'top': portDatacrop[0],
-						'bottom': portDatacrop[1],
-						'left': portDatacrop[2],
-						'right': portDatacrop[3]
+						'top': portData.crop[0],
+						'bottom': portData.crop[1],
+						'left': portData.crop[2],
+						'right': portData.crop[3]
 					}
 				}
 			);
