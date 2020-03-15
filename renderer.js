@@ -2,6 +2,17 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+const electron = require('electron');
+const OBSWebSocket = require('obs-websocket-js');
+const consoleData = require('./console_data');
+const SWP123 = require('./swp123');
+const DVS304 = require('./dvs304');
+const B200_AVMATRIX = require('./b200_avmatrix');
+
+const swp123 = new SWP123('COM4');
+const dvs304 = new DVS304('192.168.1.200');
+const b200avmatrix = new B200_AVMATRIX('COM3');
+
 function sleep(milliseconds) {
   const date = Date.now();
   let currentDate = null;
@@ -10,493 +21,189 @@ function sleep(milliseconds) {
   } while (currentDate - date < milliseconds);
 }
 
-class DVS304 {
-	constructor(ip) {
-		//http://192.168.1.200/nortxe_cmd.html?cmd=9%2A0%23
-		this.base_url = `http://${ip}/nortxe_cmd.html?cmd=`;
-	}
 
-	dvs_escape(text) {
-		var escaped_text = '';
-		for (var i = 0; i < text.length; i++) {
-			var char = text.charAt(i);
-			if (char.match(/[a-z0-9]/i)) {
-				escaped_text += char;
-			} else {
-				escaped_text += `%${char.charCodeAt(0).toString(16)}`;
-			}
-		}
-		return escaped_text;
-	}
-
-	build_url(command) {
-		return `${this.base_url}${this.dvs_escape(command)}`;
-	}
-
-	cmd(command) {
-		var url = this.build_url(command);
-		console.log(url);
-		fetch(url)
-		.then(function(resp) {
-			if (resp.status != 200) {
-				console.log(resp);
-			}
-		});
-	}
-
-	cmds(commandList) {
-		this.cmd(commandList.join(''));
-	}
-
-	// cmds(commandList) {
-	// 	for (var i = 0; i < commandList.length; i++) {
-	// 		this.cmd(commandList[i])
-	// 	}
-	// }
-
-}
-
-dvs304 = new DVS304('192.168.1.200');
-
-document.addEventListener("keydown", function (e) {
-	if (e.which === 123) {
-		require('electron').remote.getCurrentWindow().toggleDevTools();
-	} else if (e.which === 116) {
-		location.reload();
-	}
+document.addEventListener('keydown', (e) => {
+  if (e.which === 123) {
+    electron.remote.getCurrentWindow().toggleDevTools();
+  } else if (e.which === 116) {
+    window.location.reload();
+  }
 });
 
-const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline');
-const Regex = require('@serialport/parser-regex');
-
-const swpport = new SerialPort('COM4', {baudRate: 9600});
-const swpparser = swpport.pipe(new Readline({ delimiter: '\n' }));
-swpparser.on('data', console.log);
-swpport.on('error', function(err) {
-  console.log('swp error: ', err.message);
-});
-
-const compport = new SerialPort('COM3', {baudRate: 9600});
-
-const compparser = compport.pipe(new Regex({ regex: /o.i./ }));
-compparser.on('data', console.log);
-compport.on('error', function(err) {
-  console.log('comp error: ', err.message);
-});
-
-function sendCommand(port, command) {
-	port.write(command, function(err) {
-	  if (err) { return console.log('Error on write: ', err.message); }
-	});
-}
-
-function sendCommands(port, commandList) {
-	for (var i = 0; i < commandList.length; i++) {
-		sendCommand(port, commandList[i]);
-	}
-}
-
-const OBSWebSocket = require('obs-websocket-js');
 const obs = new OBSWebSocket();
 obs.connect();
 
-obs.on('error', err => {
-	console.error('socket error:', err);
+obs.on('error', (err) => {
+  console.error('socket error:', err);
 });
 
-obs.on('StreamStatus', data => {
-	console.log(data);
+obs.on('StreamStatus', (data) => {
+  console.log(data);
 });
 
-obs.on('SwitchScenes', data => {
-	console.log(`New Active Scene: ${data.sceneName}`);
+obs.on('SwitchScenes', (data) => {
+  console.log(`New Active Scene: ${data.sceneName}`);
 });
 
 function switchScene(sceneName) {
-	console.log('Switching scene to ', sceneName);
-	obs.send('SetCurrentScene', {'scene-name': sceneName});
+  console.log('Switching scene to ', sceneName);
+  obs.send('SetCurrentScene', { 'scene-name': sceneName });
 }
 
 function registerScene(sceneData) {
-	document.querySelector(sceneData.button).addEventListener(
-		'click',
-		function() {
-			switchScene(sceneData.scene);
-		}
-	);
+  document.querySelector(sceneData.button).addEventListener(
+    'click',
+    () => {
+      switchScene(sceneData.scene);
+    },
+  );
 }
 
 function updateButton(button, state, trueStyle, falseStyle) {
-	if (state) {
-		document.getElementById(button).className = trueStyle;
-	} else {
-		document.getElementById(button).className = falseStyle;
-	}
+  if (state) {
+    document.getElementById(button).className = trueStyle;
+  } else {
+    document.getElementById(button).className = falseStyle;
+  }
 }
 
 function toggleMute(source, button, mode = null) {
-	if (mode == null) {
-		obs.send('ToggleMute', {'source': source});
-	} else {
-		obs.send('SetMute' , {'source': source, 'mute': (mode == true)});
-	}
-	response = obs.send('GetMute', {'source': source}).then(response => {
-		console.log(response);
-		updateButton(button, response.muted, "button pulsingRedBG", "button");
-	});
+  if (mode == null) {
+    obs.send('ToggleMute', { source });
+  } else {
+    obs.send('SetMute', { source, mute: (mode === true) });
+  }
+  obs.send('GetMute', { source }).then((response) => {
+    console.log(response);
+    updateButton(button, response.muted, 'button pulsingRedBG', 'button');
+  });
 }
 
 function toggleStartRecording(source, button) {
-	obs.send('StartStopRecording');
-	response = obs.send('GetMute', {'source': source}).then(response => {
-		console.log(response);
-		if (responsemuted) {
-			document.getElementById(button).className = "button pulsingRedBG";
-		} else {
-			document.getElementById(button).className = "button";
-		}
-	});
+  obs.send('StartStopRecording');
+  obs.send('GetMute', { source }).then((response) => {
+    console.log(response);
+    if (response.muted) {
+      document.getElementById(button).className = 'button pulsingRedBG';
+    } else {
+      document.getElementById(button).className = 'button';
+    }
+  });
 }
 
-scenes = [
-	{'scene': 'brb',   'button': '#sceneBRB'},
-	{'scene': 'Main',  'button': '#sceneMain'},
-	{'scene': 'outro', 'button': '#sceneWaffleIron'}
+const scenes = [
+  { scene: 'brb', button: '#sceneBRB' },
+  { scene: 'Main', button: '#sceneMain' },
+  { scene: 'outro', button: '#sceneWaffleIron' },
 ];
 
-for (var i = scenes.length - 1; i >= 0; i--) {
-	registerScene(scenes[i]);
+for (let i = scenes.length - 1; i >= 0; i--) {
+  registerScene(scenes[i]);
 }
 
-function cvbs(port) {
-	return `[MS3O01I0${port}]`;
-}
-
-function svhs(port) {
-	return `[MS2O01I0${port}]`;
-}
-
-function vga(port) {
-	return `[MS1O01I0${port}]`;
-}
-
-function swp123_blank_all() {
-	sendCommands(swpport, [cvbs(0), svhs(0), vga(0)]);
-}
-
-// crop order: [top, bottom, left, right]
-switchData = [
-	// 240p - comp
-	{
-		'button': '#vidnes',
-		'dvs304': [
-			'4&',     // input select
-			'9*0#',
-			'122)',
-			'12*600#',
-			'131(',
-			'13*480#',
-			'11*800#',
-			'42D'
-		],
-		'swp123': [vga(0), svhs(0), cvbs(1), vga(4), cvbs(1)],
-		'comp': ['40\r'],
-		'crop': [ 0,  4, 39, 28]
-	},
-	{
-		'button': '#vidgen',
-		'dvs304': ['9*0#'],
-		'swp123': [vga(4), cvbs(3)],
-		'comp': ['40\r'],
-		'crop': [18, 14, 40, 30]
-	},
-	{
-		'button': '#vidtg',
-		'dvs304': [
-			'4&',     // input select
-			'9*0#',
-			'142)',
-			'12*624#',
-			'133(',
-			'13*480#',
-			'11*800#',
-			'42D'
-		],
-		'swp123': [vga(0), svhs(0), cvbs(4), vga(4), cvbs(4)],
-		'comp': ['40\r'],
-		'crop': [ 4,  4, 33, 37]
-	},
-
-	// 240p - svid
-	{
-		'button': '#vidsnes',
-		'dvs304': [
-			'4&',      // input select
-			'9*0#',    // aspect ratio
-			'123)',    // H start
-			'116(',    // V start
-			'11*807#', // total pixels
-			'12*605#', // active pixels
-			'13*447#', // active lines
-			'127D',    // detail filter
-			'26U',     // pixel phase
-		],
-		'swp123': [vga(0), cvbs(0), svhs(3), vga(4), svhs(3)],
-		'comp': ['40\r'],
-		'crop': [ 0,  4,  36,  32]
-	},
-	{
-		'button': '#vidsgb',
-		'dvs304': [
-			'4&',      // input select
-			'9*0#',    // aspect ratio
-			'123)',    // H start
-			'116(',    // V start
-			'11*807#', // total pixels
-			'12*605#', // active pixels
-			'13*447#', // active lines
-			'127D',    // detail filter
-			'26U',     // pixel phase
-		],
-		'swp123': [vga(0), cvbs(0), svhs(3), vga(4), svhs(3)],
-		'comp': ['40\r'],
-		'crop': [94, 98, 143, 138]},
-	{
-		'button': '#vidpsx',
-		'dvs304': [
-			'4&',     // input select
-			'9*0#',   // aspect ratio
-			'124)',   // H start
-			'102(',   // V start
-			'11*807#', // total pixels
-			'12*600#', // active pixels
-			'13*450#', // active lines
-			'127D',   // detail filter
-			'0U',     // pixel phase
-		],
-		'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
-		'comp': ['40\r'],
-		'crop': [ 0,  4,  35,  34]
-	},
-	{
-		'button': '#vidn64',
-		'dvs304': [
-			'4&',     // input select
-			'9*0#',   // aspect ratio
-			'149)',   // H start
-			'118(',   // V start
-			'11*807#', // total pixels
-			'12*654#', // active pixels
-			'13*453#', // active lines
-			'127D',   // detail filter
-			'29U',     // pixel phase
-		],
-		'swp123': [vga(0), cvbs(0), svhs(2), vga(4), svhs(2)],
-		'comp': ['40\r'],
-		'crop': [ 2,  4,  12,  12]
-	},
-
-	// 480i - svid - through DVS direct
-	{
-		'button': '#vidpsx-480i',
-		'dvs304': [
-			'3&',     // input select
-			'9*0#',   // aspect ratio
-			'57)',    // H start
-			'72(',    // V start
-			'12*647#', // active pixels
-			'13*447#', // active lines
-			'127D',   // detail filter
-		],
-		'comp': ['40\r'],
-		'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
-		'crop': [27, 29, 36, 32]
-	},
-	{
-		'button': '#vidn64-480i',
-		'dvs304': [
-			'3&',      // input select
-			'9*0#',    // aspect ratio
-			'80)',     // H start
-			'81(',     // V start
-			'12*694#', // active pixels
-			'13*465#', // active lines
-			'127D',    // detail filter
-		],
-		'swp123': [vga(4), svhs(2)],
-		'comp': ['40\r'],
-		'crop': [28, 32, 12, 12]
-	},
-
-	// VGA
-	{
-		'button': '#viddc',
-		'dvs304': ['9*0#'],
-		'swp123': [vga(0), cvbs(0), svhs(0), vga(3)],
-		'comp': ['40\r'],
-		'crop': [ 0,  4,  47,  25]
-	},
-
-	// vcr - comp
-	{
-		'button': '#vidsms',
-		'dvs304': ['9*0#'],
-		'swp123': [vga(4), cvbs(2)],
-		'comp': ['40\r'],
-		'crop': [50, 46, 46, 40]
-	},
-
-	// Wii
-	{
-		'button': '#vidwii-16x9-full',
-		'dvs304': [
-			'2&',     // input select
-			'9*1#',   // aspect ratio
-			'111)',   // H start
-			'117(',   // V start
-			'11*863#', // total pixels
-			'12*691#', // active pixels
-			'13*457#', // active lines
-			'127D',   // detail filter
-		],
-		'swp123': [vga(0), cvbs(0), svhs(0), vga(4)],
-		'comp': ['42\r'],
-		'crop': [27, 29, 36, 32]
-	},
-	{
-		'button': '#vidwii-16x9-narrow',
-		'dvs304': [
-			'2&',     // input select
-			'9*1#',   // aspect ratio
-			'88)',    // H start
-			'129(',   // V start
-			'11*863#', // total pixels
-			'12*645#', // active pixels
-			'13*481#', // active lines
-			'127D',   // detail filter
-		],
-		'swp123': [vga(0), cvbs(0), svhs(0), vga(4)],
-		'comp': ['42\r'],
-		'crop': [27, 29, 36, 32]
-	},
-];
 
 function registerSwitchPort(portData) {
-	console.log(portData);
-	document.querySelector(portData.button).addEventListener (
-		'click',
-		function() {
-			//swp123_blank_all();
-			sendCommands(swpport, portData.swp123);
-			sendCommands(compport, portData.comp);
-			sleep(500);
-			dvs304.cmds(portData.dvs304);
-			obs.send('SetSceneItemProperties',
-				{
-					'scene-name': '4x3 frame',
-					'item': 'amarec_live',
-					'crop': {
-						'top': portData.crop[0],
-						'bottom': portData.crop[1],
-						'left': portData.crop[2],
-						'right': portData.crop[3]
-					}
-				}
-			);
-/*			response = obs.send('GetSceneItemProperties',
-				{
-					'scene-name': 'Main',
-					'item': 'amarec_live',
-				}
-			).then(response => {
-				console.log(response)
-			})
-*/		}
-	);
+  console.log(portData);
+  document.querySelector(portData.button).addEventListener(
+    'click',
+    () => {
+      swp123.sendCommands(portData.swp123);
+      b200avmatrix.sendCommands(portData.comp);
+      sleep(500);
+      dvs304.cmds(portData.dvs304);
+      obs.send('SetSceneItemProperties',
+        {
+          'scene-name': '4x3 frame',
+          item: 'amarec_live',
+          crop: {
+            top: portData.crop[0],
+            bottom: portData.crop[1],
+            left: portData.crop[2],
+            right: portData.crop[3],
+          },
+        });
+    },
+  );
 }
 
-for (var i = switchData.length - 1; i >= 0; i--) {
-	registerSwitchPort(switchData[i]);
+
+for (let i = consoleData.length - 1; i >= 0; i--) {
+  registerSwitchPort(consoleData[i]);
 }
 
 document.querySelector('#vid-blank').addEventListener(
-	'click',
-	function() {
-		swp123_blank_all();
-		sendCommand(compport,'40\r');
-	}
+  'click',
+  () => {
+    swp123.swp123BlankAll();
+    b200avmatrix.sendCommand('40\r');
+  },
 );
 
-nateMuted = false;
+let nateMuted = false;
 function muteNate() {
-	nateMuted = !nateMuted;
-	toggleMute('VM B1 - Mics', 'nateMute', nateMuted);
-	obs.send('SetSceneItemProperties',
-		{
-			'scene-name':'Main',
-			'item': 'fancy cam',
-			'visible': !nateMuted
-		}
-	);
-	obs.send('SetSceneItemProperties',
-		{
-			'scene-name':'raffle time',
-			'item': 'fancy cam',
-			'visible': !nateMuted
-		}
-	);
+  nateMuted = !nateMuted;
+  toggleMute('VM B1 - Mics', 'nateMute', nateMuted);
+  obs.send('SetSceneItemProperties',
+    {
+      'scene-name': 'Main',
+      item: 'fancy cam',
+      visible: !nateMuted,
+    });
+  obs.send('SetSceneItemProperties',
+    {
+      'scene-name': 'raffle time',
+      item: 'fancy cam',
+      visible: !nateMuted,
+    });
 }
 
-document.querySelector('#nateMute').addEventListener (
-	'click',
-	function() {
-		muteNate();
-	}
+document.querySelector('#nateMute').addEventListener(
+  'click',
+  () => {
+    muteNate();
+  },
 );
 
-document.querySelector('#switchMute').addEventListener (
-	'click',
-	function() {
-		sendCommand(swpport, '[MUTE]');
-	}
+document.querySelector('#switchMute').addEventListener(
+  'click',
+  () => {
+    swp123.sendCommand('[MUTE]');
+  },
 );
 
-//// stack init ////
+// // stack init ////
 
-sendCommands(
-	swpport,
-	[
-		'[SMD0]', // separate switcher mode
-		'[AFV1]'  // audio follow video enabled
-	]
+swp123.sendCommands(
+  [
+    '[SMD0]', // separate switcher mode
+    '[AFV1]', // audio follow video enabled
+  ],
 );
 
-sendCommands(compport, '01\r');
+b200avmatrix.sendCommands('01\r');
 
 // set all the audio input trim levels
-sendCommands(
-	swpport,
-	[
-		'[VIN06-180]', // n64
-		'[VIN07-110]', // snes
-		'[VIN09-035]', // nes
-		'[VIN11-140]', // gen
-		'[VIN12-000]', // tg16 (noisy audio path)
-		'[VIN05-150]', // dc - WRONG NOW, UPDATE TO VGA AUDIO BANK
-		'[VIN08-135]'  // psx
-	]
+swp123.sendCommands(
+  [
+    '[VIN06-180]', // n64
+    '[VIN07-110]', // snes
+    '[VIN09-035]', // nes
+    '[VIN11-140]', // gen
+    '[VIN12-000]', // tg16 (noisy audio path)
+    '[VIN05-150]', // dc - WRONG NOW, UPDATE TO VGA AUDIO BANK
+    '[VIN08-135]', // psx
+  ],
 );
 
 // dvs304 global state
 dvs304.cmds(
-	[
-		'1X',    // executive mode enable
-		'52*1#', // enhanced mode enable (AGC on)
-		'1M',    // auto memory enable
-		'77*0#', // refresh lock
-		'55*0#', // auto image disable
-		'10*0#', // auto switch disable
-		''
-	]
+  [
+    '1X', // executive mode enable
+    '52*1#', // enhanced mode enable (AGC on)
+    '1M', // auto memory enable
+    '77*0#', // refresh lock
+    '55*0#', // auto image disable
+    '10*0#', // auto switch disable
+    '',
+  ],
 );
