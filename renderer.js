@@ -68,24 +68,32 @@ document.addEventListener("keydown", function (e) {
 
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
-const port = new SerialPort('COM4', {baudRate: 9600});
+const Regex = require('@serialport/parser-regex');
 
-
-const parser = port.pipe(new Readline({ delimiter: '\n' }));
-parser.on('data', console.log);
-port.on('error', function(err) {
-  console.log('Error: ', err.message);
+const swpport = new SerialPort('COM4', {baudRate: 9600});
+const swpparser = swpport.pipe(new Readline({ delimiter: '\n' }));
+swpparser.on('data', console.log);
+swpport.on('error', function(err) {
+  console.log('swp error: ', err.message);
 });
 
-function sendCommand(command) {
+const compport = new SerialPort('COM3', {baudRate: 9600});
+
+const compparser = compport.pipe(new Regex({ regex: /o.i./ }));
+compparser.on('data', console.log);
+compport.on('error', function(err) {
+  console.log('comp error: ', err.message);
+});
+
+function sendCommand(port, command) {
 	port.write(command, function(err) {
 	  if (err) { return console.log('Error on write: ', err.message); }
 	});
 }
 
-function sendCommands(commandList) {
+function sendCommands(port, commandList) {
 	for (var i = 0; i < commandList.length; i++) {
-		sendCommand(commandList[i]);
+		sendCommand(port, commandList[i]);
 	}
 }
 
@@ -174,7 +182,7 @@ function vga(port) {
 }
 
 function swp123_blank_all() {
-	sendCommands([cvbs(0), svhs(0), vga(0)]);
+	sendCommands(swpport, [cvbs(0), svhs(0), vga(0)]);
 }
 
 // crop order: [top, bottom, left, right]
@@ -193,10 +201,15 @@ switchData = [
 			'42D'
 		],
 		'swp123': [vga(0), svhs(0), cvbs(1), vga(4), cvbs(1)],
+		'comp': ['40\r'],
 		'crop': [ 0,  4, 39, 28]
 	},
 	{
-		'button': '#vidgen',      'dvs304': ['9*0#'], 'swp123': [vga(4), cvbs(3)], 'crop': [18, 14, 40, 30]
+		'button': '#vidgen',
+		'dvs304': ['9*0#'],
+		'swp123': [vga(4), cvbs(3)],
+		'comp': ['40\r'],
+		'crop': [18, 14, 40, 30]
 	},
 	{
 		'button': '#vidtg',
@@ -211,12 +224,24 @@ switchData = [
 			'42D'
 		],
 		'swp123': [vga(0), svhs(0), cvbs(4), vga(4), cvbs(4)],
+		'comp': ['40\r'],
 		'crop': [ 4,  4, 33, 37]
 	},
 
 	// 240p - svid
-	{'button': '#vidsnes',     'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(3)], 'crop': [ 0,  4,  36,  32]},
-	{'button': '#vidsgb',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(3)], 'crop': [94, 98, 143, 138]},
+	{
+		'button': '#vidsnes',
+		'dvs304': ['9*0#'],
+		'swp123': [vga(4), svhs(3)],
+		'comp': ['40\r'],
+		'crop': [ 0,  4,  36,  32]
+	},
+	{
+		'button': '#vidsgb',
+		'dvs304': ['9*0#'],
+		'swp123': [vga(4), svhs(3)],
+		'comp': ['40\r'],
+		'crop': [94, 98, 143, 138]},
 	{
 		'button': '#vidpsx',
 		'dvs304': [
@@ -224,34 +249,34 @@ switchData = [
 			'9*0#',   // aspect ratio
 			'124)',   // H start
 			'102(',   // V start
-			'11*807', // total pixels
-			'12*600', // active pixels
-			'13*450', // active lines
+			'11*807#', // total pixels
+			'12*600#', // active pixels
+			'13*450#', // active lines
 			'127D',   // detail filter
 			'0U',     // pixel phase
 		],
 		'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
+		'comp': ['40\r'],
 		'crop': [ 0,  4,  35,  34]
 	},
-	{'button': '#vidn64',      'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(2)], 'crop': [ 2,  4,  12,  12]},
+	{
+		'button': '#vidn64',
+		'dvs304': [
+			'4&',     // input select
+			'9*0#',   // aspect ratio
+			'149)',   // H start
+			'118(',   // V start
+			'11*807#', // total pixels
+			'12*654#', // active pixels
+			'13*453#', // active lines
+			'127D',   // detail filter
+			'29U',     // pixel phase
+		],
+		'swp123': [vga(0), cvbs(0), svhs(2), vga(4), svhs(2)],
+		'comp': ['40\r'],
+		'crop': [ 2,  4,  12,  12]
+	},
 
-	// 480i - svid - through RT2X (old)
-	// {
-	// 	'button': '#vidpsx-480i-old',
-	// 	'dvs304': [
-	// 		'4&',     // input select
-	// 		'9*0#',   // aspect ratio
-	// 		'125)',   // H start
-	// 		'113(',   // V start
-	// 		'11*805', // total pixels
-	// 		'12*608', // active pixels
-	// 		'13*448', // active lines
-	// 		'127D',   // detail filter
-	// 		'0U',     // pixel phase
-	// 	],
-	// 	'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
-	// 	'crop': [27, 29, 36, 32]
-	// },
 	// 480i - svid - through DVS direct
 	{
 		'button': '#vidpsx-480i',
@@ -260,29 +285,91 @@ switchData = [
 			'9*0#',   // aspect ratio
 			'57)',    // H start
 			'72(',    // V start
-			'12*647', // active pixels
-			'13*447', // active lines
+			'12*647#', // active pixels
+			'13*447#', // active lines
 			'127D',   // detail filter
 		],
+		'comp': ['40\r'],
 		'swp123': [vga(0), cvbs(0), svhs(4), vga(4), svhs(4)],
 		'crop': [27, 29, 36, 32]
 	},
-	{'button': '#vidn64-480i', 'dvs304': ['9*0#'], 'swp123': [vga(4), svhs(2)], 'crop': [28, 32, 12, 12]},
+	{
+		'button': '#vidn64-480i',
+		'dvs304': [
+			'3&',      // input select
+			'9*0#',    // aspect ratio
+			'80)',     // H start
+			'81(',     // V start
+			'12*694#', // active pixels
+			'13*465#', // active lines
+			'127D',    // detail filter
+		],
+		'swp123': [vga(4), svhs(2)],
+		'comp': ['40\r'],
+		'crop': [28, 32, 12, 12]
+	},
 
 	// VGA
-	{'button': '#viddc',       'dvs304': ['9*0#'], 'swp123': [vga(0), cvbs(0), svhs(0), vga(3)], 'crop': [ 0,  4,  47,  25]},
+	{
+		'button': '#viddc',
+		'dvs304': ['9*0#'],
+		'swp123': [vga(0), cvbs(0), svhs(0), vga(3)],
+		'comp': ['40\r'],
+		'crop': [ 0,  4,  47,  25]
+	},
 
 	// vcr - comp
-	{'button': '#vidsms',      'dvs304': ['9*0#'], 'swp123': [vga(4), cvbs(2)], 'crop': [50, 46, 46, 40]}
+	{
+		'button': '#vidsms',
+		'dvs304': ['9*0#'],
+		'swp123': [vga(4), cvbs(2)],
+		'comp': ['40\r'],
+		'crop': [50, 46, 46, 40]
+	},
 
+	// Wii
+	{
+		'button': '#vidwii-16x9-full',
+		'dvs304': [
+			'2&',     // input select
+			'9*1#',   // aspect ratio
+			'111)',   // H start
+			'117(',   // V start
+			'11*863#', // total pixels
+			'12*691#', // active pixels
+			'13*457#', // active lines
+			'127D',   // detail filter
+		],
+		'swp123': [vga(0), cvbs(0), svhs(0), vga(4)],
+		'comp': ['42\r'],
+		'crop': [27, 29, 36, 32]
+	},
+	{
+		'button': '#vidwii-16x9-narrow',
+		'dvs304': [
+			'2&',     // input select
+			'9*1#',   // aspect ratio
+			'88)',    // H start
+			'129(',   // V start
+			'11*863#', // total pixels
+			'12*645#', // active pixels
+			'13*481#', // active lines
+			'127D',   // detail filter
+		],
+		'swp123': [vga(0), cvbs(0), svhs(0), vga(4)],
+		'comp': ['42\r'],
+		'crop': [27, 29, 36, 32]
+	},
 ];
 
 function registerSwitchPort(portData) {
+	console.log(portData);
 	document.querySelector(portData.button).addEventListener (
 		'click',
 		function() {
 			//swp123_blank_all();
-			sendCommands(portData.swp123);
+			sendCommands(swpport, portData.swp123);
+			sendCommands(compport, portData.comp);
 			sleep(500);
 			dvs304.cmds(portData.dvs304);
 			obs.send('SetSceneItemProperties',
@@ -350,21 +437,25 @@ document.querySelector('#nateMute').addEventListener (
 document.querySelector('#switchMute').addEventListener (
 	'click',
 	function() {
-		sendCommand('[MUTE]');
+		sendCommand(swpport, '[MUTE]');
 	}
 );
 
 //// stack init ////
 
 sendCommands(
+	swpport,
 	[
 		'[SMD0]', // separate switcher mode
 		'[AFV1]'  // audio follow video enabled
 	]
 );
 
+sendCommands(compport, '01\r');
+
 // set all the audio input trim levels
 sendCommands(
+	swpport,
 	[
 		'[VIN06-180]', // n64
 		'[VIN07-110]', // snes
