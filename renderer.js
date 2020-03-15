@@ -231,15 +231,35 @@ switchData = [
 	// 240p - svid
 	{
 		'button': '#vidsnes',
-		'dvs304': ['9*0#'],
-		'swp123': [vga(4), svhs(3)],
+		'dvs304': [
+			'4&',      // input select
+			'9*0#',    // aspect ratio
+			'123)',    // H start
+			'116(',    // V start
+			'11*807#', // total pixels
+			'12*605#', // active pixels
+			'13*447#', // active lines
+			'127D',    // detail filter
+			'26U',     // pixel phase
+		],
+		'swp123': [vga(0), cvbs(0), svhs(3), vga(4), svhs(3)],
 		'comp': ['40\r'],
 		'crop': [ 0,  4,  36,  32]
 	},
 	{
 		'button': '#vidsgb',
-		'dvs304': ['9*0#'],
-		'swp123': [vga(4), svhs(3)],
+		'dvs304': [
+			'4&',      // input select
+			'9*0#',    // aspect ratio
+			'123)',    // H start
+			'116(',    // V start
+			'11*807#', // total pixels
+			'12*605#', // active pixels
+			'13*447#', // active lines
+			'127D',    // detail filter
+			'26U',     // pixel phase
+		],
+		'swp123': [vga(0), cvbs(0), svhs(3), vga(4), svhs(3)],
 		'comp': ['40\r'],
 		'crop': [94, 98, 143, 138]},
 	{
@@ -404,6 +424,7 @@ document.querySelector('#vid-blank').addEventListener(
 	'click',
 	function() {
 		swp123_blank_all();
+		sendCommand(compport,'40\r');
 	}
 );
 
