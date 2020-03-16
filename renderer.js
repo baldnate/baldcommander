@@ -67,12 +67,8 @@ function updateButton(button, state, trueStyle, falseStyle) {
   }
 }
 
-function toggleMute(source, button, mode = null) {
-  if (mode == null) {
-    obs.send('ToggleMute', { source });
-  } else {
-    obs.send('SetMute', { source, mute: (mode === true) });
-  }
+function toggleMute(source, button, mode) {
+  obs.send('SetMute', { source, mute: (mode === true) });
   obs.send('GetMute', { source }).then((response) => {
     console.log(response);
     updateButton(button, response.muted, 'button pulsingRedBG', 'button');
