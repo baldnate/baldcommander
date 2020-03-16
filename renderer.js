@@ -45,16 +45,17 @@ obs.on('SwitchScenes', (data) => {
   console.log(`New Active Scene: ${data.sceneName}`);
 });
 
-function switchScene(sceneName) {
-  console.log('Switching scene to ', sceneName);
-  obs.send('SetCurrentScene', { 'scene-name': sceneName });
+function switchScene(scene, transition) {
+  console.log('Switching scene to ', scene);
+  obs.send('SetCurrentTransition', { 'transition-name': transition });
+  obs.send('SetCurrentScene', { 'scene-name': scene });
 }
 
 function registerScene(sceneData) {
   document.querySelector(sceneData.button).addEventListener(
     'click',
     () => {
-      switchScene(sceneData.scene);
+      switchScene(sceneData.scene, 'TBC - short');
     },
   );
 }
@@ -70,15 +71,14 @@ function updateButton(button, state, trueStyle, falseStyle) {
 function toggleMute(source, button, mode) {
   obs.send('SetMute', { source, mute: (mode === true) });
   obs.send('GetMute', { source }).then((response) => {
-    console.log(response);
     updateButton(button, response.muted, 'button pulsingRedBG', 'button');
   });
 }
 
+// eslint-disable-next-line no-unused-vars
 function toggleStartRecording(source, button) {
   obs.send('StartStopRecording');
   obs.send('GetMute', { source }).then((response) => {
-    console.log(response);
     if (response.muted) {
       document.getElementById(button).className = 'button pulsingRedBG';
     } else {
@@ -88,18 +88,54 @@ function toggleStartRecording(source, button) {
 }
 
 const scenes = [
-  { scene: 'brb', button: '#sceneBRB' },
-  { scene: 'Main', button: '#sceneMain' },
-  { scene: 'outro', button: '#sceneWaffleIron' },
+  { scene: 'brb 2', button: '#sceneBRB' },
+  { scene: 'outro 2', button: '#sceneOutro' },
 ];
 
 for (let i = scenes.length - 1; i >= 0; i--) {
   registerScene(scenes[i]);
 }
 
+function buildSceneFromRatio(ratio) {
+  return `${ratio} frame`;
+}
+function buildVisibleSceneItemProps(ratio, source, cropData) {
+  return {
+    'scene-name': buildSceneFromRatio(ratio),
+    item: source,
+    crop: {
+      top: cropData[0],
+      bottom: cropData[1],
+      left: cropData[2],
+      right: cropData[3],
+    },
+    visible: true,
+  };
+}
+
+function buildHiddenSceneItemProps(ratio, source) {
+  return {
+    'scene-name': buildSceneFromRatio(ratio),
+    item: source,
+    visible: false,
+  };
+}
+
+function configureSources(ratio, activeSource, cropData) {
+  const sources = ['amarec_live', 'hd_cap'];
+  for (let i = 0; i < sources.length; i++) {
+    const source = sources[i];
+    let props;
+    if (source === activeSource) {
+      props = buildVisibleSceneItemProps(ratio, source, cropData);
+    } else {
+      props = buildHiddenSceneItemProps(ratio, source);
+    }
+    obs.send('SetSceneItemProperties', props);
+  }
+}
 
 function registerSwitchPort(portData) {
-  console.log(portData);
   document.querySelector(portData.button).addEventListener(
     'click',
     () => {
@@ -107,17 +143,8 @@ function registerSwitchPort(portData) {
       b200avmatrix.sendCommands(portData.comp);
       sleep(500);
       dvs304.cmds(portData.dvs304);
-      obs.send('SetSceneItemProperties',
-        {
-          'scene-name': '4x3 frame',
-          item: 'amarec_live',
-          crop: {
-            top: portData.crop[0],
-            bottom: portData.crop[1],
-            left: portData.crop[2],
-            right: portData.crop[3],
-          },
-        });
+      switchScene(`Game - ${portData.ratio}`, 'TBC - short');
+      configureSources(portData.ratio, portData.sourceName, portData.crop);
     },
   );
 }
@@ -130,7 +157,7 @@ for (let i = consoleData.length - 1; i >= 0; i--) {
 document.querySelector('#vid-blank').addEventListener(
   'click',
   () => {
-    swp123.swp123BlankAll();
+    swp123.blankAll();
     b200avmatrix.sendCommand('40\r');
   },
 );
