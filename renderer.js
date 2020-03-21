@@ -168,13 +168,7 @@ function muteNate() {
   toggleMute('VM B1 - Mics', 'nateMute', nateMuted);
   obs.send('SetSceneItemProperties',
     {
-      'scene-name': 'Main',
-      item: 'fancy cam',
-      visible: !nateMuted,
-    });
-  obs.send('SetSceneItemProperties',
-    {
-      'scene-name': 'raffle time',
+      'scene-name': 'nateCam',
       item: 'fancy cam',
       visible: !nateMuted,
     });
