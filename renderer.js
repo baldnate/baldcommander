@@ -13,14 +13,9 @@ const swp123 = new SWP123('COM4');
 const dvs304 = new DVS304('192.168.1.200');
 const b200avmatrix = new B200_AVMATRIX('COM3');
 
-function sleep(milliseconds) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 
 document.addEventListener('keydown', (e) => {
   if (e.which === 123) {
@@ -55,7 +50,7 @@ function registerScene(sceneData) {
   document.querySelector(sceneData.button).addEventListener(
     'click',
     () => {
-      switchScene(sceneData.scene, 'TBC - short');
+      switchScene(sceneData.scene, sceneData.transition);
     },
   );
 }
@@ -70,9 +65,11 @@ function updateButton(button, state, trueStyle, falseStyle) {
 
 function toggleMute(source, button, mode) {
   obs.send('SetMute', { source, mute: (mode === true) });
-  obs.send('GetMute', { source }).then((response) => {
-    updateButton(button, response.muted, 'button pulsingRedBG', 'button');
-  });
+  if (button) {
+    obs.send('GetMute', { source }).then((response) => {
+      updateButton(button, response.muted, 'button pulsingRedBG', 'button');
+    });
+  }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -88,8 +85,11 @@ function toggleStartRecording(source, button) {
 }
 
 const scenes = [
-  { scene: 'brb 2', button: '#sceneBRB' },
-  { scene: 'outro 2', button: '#sceneOutro' },
+  { scene: 'brb 2', button: '#sceneBRB', transition: 'TBC - short' },
+  { scene: 'outro 2', button: '#sceneOutro', transition: 'TBC - short' },
+  { scene: 'bald cinema', button: '#sceneCinema', transition: 'TBC - long' },
+  { scene: 'intro 2', button: '#sceneIntro', transition: 'Cut' },
+  { scene: 'VCR STOP', button: '#sceneVCRSTOP', transition: 'Cut' },
 ];
 
 for (let i = scenes.length - 1; i >= 0; i--) {
@@ -138,13 +138,16 @@ function configureSources(ratio, activeSource, cropData) {
 function registerSwitchPort(portData) {
   document.querySelector(portData.button).addEventListener(
     'click',
-    () => {
+    async () => {
+      toggleMute('VM B2 - Hybrid', false, true);
       swp123.sendCommands(portData.swp123);
       b200avmatrix.sendCommands(portData.comp);
-      sleep(500);
+      await sleep(300);
       dvs304.cmds(portData.dvs304);
       switchScene(`Game - ${portData.ratio}`, 'TBC - short');
       configureSources(portData.ratio, portData.sourceName, portData.crop);
+      await sleep(450);
+      toggleMute('VM B2 - Hybrid', false, false);
     },
   );
 }
