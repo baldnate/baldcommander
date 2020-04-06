@@ -68,7 +68,7 @@ module.exports = [
     comp: ['40\r'],
     ratio: '4x3',
     sourceName: 'amarec_live',
-    crop: [0, 4, 36, 32], // [t,b,l,r]
+    crop: [16, 30, 36, 32], // [t,b,l,r]
   },
   {
     button: '#vidsgb',
