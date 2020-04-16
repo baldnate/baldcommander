@@ -24,12 +24,21 @@ module.exports = [
   },
   {
     button: '#vidgen',
-    dvs304: ['9*0#'],
-    swp123: [swp.vga(4), swp.cvbs(3)],
+    dvs304: [
+      '4&', // input select
+      '9*0#',
+      '117)',
+      '12*610#',
+      '115(',
+      '13*451#',
+      '11*800#',
+      '42D',
+    ],
+    swp123: [swp.vga(4), swp.svhs(0), swp.cvbs(3), swp.vga(4), swp.cvbs(3)],
     comp: ['40\r'],
     ratio: '4x3',
     sourceName: 'amarec_live',
-    crop: [18, 14, 40, 30], // [t,b,l,r]
+    crop: [18, 14, 41, 27], // [t,b,l,r]
   },
   {
     button: '#vidtg',
@@ -68,7 +77,7 @@ module.exports = [
     comp: ['40\r'],
     ratio: '4x3',
     sourceName: 'amarec_live',
-    crop: [16, 30, 36, 32], // [t,b,l,r]
+    crop: [16, 16, 36, 32], // [t,b,l,r]
   },
   {
     button: '#vidsgb',
