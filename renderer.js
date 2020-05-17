@@ -14,7 +14,7 @@ const dvs304 = new DVS304('192.168.1.200');
 const b200avmatrix = new B200_AVMATRIX('COM3');
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 document.addEventListener('keydown', (e) => {
