@@ -195,6 +195,27 @@ module.exports = [
     crop: [50, 46, 46, 40], // [t,b,l,r]
   },
 
+  // XBOX
+  {
+    button: '#vidxbox',
+    dvs304: [
+      '2&', // input select
+      '9*1#', // aspect ratio
+      '111)', // H start
+      '117(', // V start
+      '11*863#', // total pixels
+      '12*691#', // active pixels
+      '13*457#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['45\r'],
+    ratio: '16x9',
+    sourceName: 'hd_cap',
+    crop: [0, 0, 0, 0], // [t,b,l,r]
+  },
+
+
   // Wii
   {
     button: '#vidwii-16x9-full',
