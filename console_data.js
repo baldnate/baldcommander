@@ -197,10 +197,10 @@ module.exports = [
 
   // XBOX
   {
-    button: '#vidxbox',
+    button: '#vidxbox-480i',
     dvs304: [
       '2&', // input select
-      '9*1#', // aspect ratio
+      '9*0#', // aspect ratio
       '111)', // H start
       '117(', // V start
       '11*863#', // total pixels
@@ -209,12 +209,65 @@ module.exports = [
       '127D', // detail filter
     ],
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
-    comp: ['45\r'],
+    comp: ['46\r'],
     ratio: '16x9',
     sourceName: 'hd_cap',
     crop: [0, 0, 0, 0], // [t,b,l,r]
   },
-
+  {
+    button: '#vidxbox-480p-4-3',
+    dvs304: [
+      '2&', // input select
+      '9*0#', // aspect ratio
+      '128)', // H start
+      '128(', // V start
+      '11*863#', // total pixels
+      '12*725#', // active pixels
+      '13*480#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['46\r'],
+    ratio: '16x9',
+    sourceName: 'hd_cap',
+    crop: [0, 0, 0, 0], // [t,b,l,r]
+  },
+  {
+    button: '#vidxbox-480p-16-9',
+    dvs304: [
+      '2&', // input select
+      '9*1#', // aspect ratio
+      '128)', // H start
+      '128(', // V start
+      '11*863#', // total pixels
+      '12*725#', // active pixels
+      '13*480#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['46\r'],
+    ratio: '16x9',
+    sourceName: 'hd_cap',
+    crop: [0, 0, 0, 0], // [t,b,l,r]
+  },
+  {
+    button: '#vidxbox-720p',
+    dvs304: [
+      '2&', // input select
+      '9*1#', // aspect ratio
+      '130)', // H start
+      '128(', // V start
+      '11*1650#', // total pixels
+      '12*1279#', // active pixels
+      '13*720#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['46\r'],
+    ratio: '16x9',
+    sourceName: 'hd_cap',
+    crop: [0, 0, 0, 0], // [t,b,l,r]
+  },
 
   // Wii
   {
