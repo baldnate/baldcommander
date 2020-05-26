@@ -7,6 +7,7 @@ body {
   color: #f8f8f2;
   font-size: 16px;
   -webkit-user-select: none;
+  overflow: hidden;
 }
 
 .button {
@@ -15,6 +16,8 @@ body {
     border: none;
     color: white;
     padding: 1px 1px;
+    margin-top: 1px;
+    margin-bottom: 3px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -24,9 +27,18 @@ body {
     outline: none;
 }
 
+.button:hover {background-color: #1e5e21}
+
 .narrow {
-  width: 50px;
+  width: 53px;
 }
+
+.spacer {
+  background-color: #36393f;
+  color: #36393f;
+}
+
+.spacer:hover {background-color: #36393f}
 
 .textbox {
     font-family: Open Sans;
@@ -41,10 +53,6 @@ body {
     width: 100px;
     outline: none;
 }
-
-.button:hover {background-color: #1e5e21}
-
-
 
 .solidGreenBG {
     background-color: #3e8e41;
@@ -67,4 +75,28 @@ body {
   100% {
     background-color: #ff0000;
   }
+}
+
+DIV.stack-v
+{
+    /* border: solid thick red; */
+    overflow:hidden;
+}
+
+DIV.stack-h
+{
+    /* border: solid thick blue; */
+    overflow:hidden;
+}
+
+DIV.content
+{
+    padding: 5px;
+    background-color: grey;
+    margin: 5px;
+}
+
+DIV.stack-h > DIV.content
+{
+    float:left;
 }

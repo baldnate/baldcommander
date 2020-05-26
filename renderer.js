@@ -87,6 +87,7 @@ function toggleStartRecording(source, button) {
 const scenes = [
   { scene: 'brb 2', button: '#sceneBRB', transition: 'TBC - short' },
   { scene: 'outro 2', button: '#sceneOutro', transition: 'TBC - short' },
+  { scene: 'vortex', button: '#sceneVortex', transition: 'TBC - short' },
   { scene: 'bald cinema', button: '#sceneCinema', transition: 'TBC - long' },
   { scene: 'intro 2', button: '#sceneIntro', transition: 'Cut' },
   { scene: 'VCR STOP', button: '#sceneVCRSTOP', transition: 'Cut' },
