@@ -1,28 +1,32 @@
 // swp123 support code
 
 const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline');
 
 class SWP123 {
   constructor(serialport) {
     this.port = new SerialPort(serialport, { baudRate: 9600 });
-    this.swpparser = this.port.pipe(new Readline({ delimiter: '\n' }));
-    this.swpparser.on('data', console.log);
     this.port.on('error', (err) => {
-      console.log('swp error: ', err.message);
+      if (err) {
+        console.log('swp123 error: ', err);
+      }
     });
-  }
-
-  sendCommand(command) {
-    this.port.write(command, (err) => {
-      if (err) { console.log('Error on write: ', err.message); }
+    this.port.on('close', (err) => {
+      console.log('swp123 port closed');
+      if (err) {
+        console.log(err);
+      }
+      this.port.open();
     });
   }
 
   sendCommands(commandList) {
     for (let i = 0; i < commandList.length; i++) {
-      this.sendCommand(commandList[i]);
+      this.port.write(commandList[i]);
     }
+  }
+
+  sendCommand(command) {
+    this.sendCommands([command]);
   }
 
   static cvbs(port) {
