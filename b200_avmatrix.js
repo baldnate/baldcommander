@@ -1,13 +1,17 @@
 const SerialPort = require('serialport');
-const Regex = require('@serialport/parser-regex');
 
 class B200_AVMATRIX {
   constructor(serialport) {
     this.port = new SerialPort(serialport, { baudRate: 9600 });
-    this.compparser = this.port.pipe(new Regex({ regex: /o.i./ }));
-    this.compparser.on('data', console.log);
     this.port.on('error', (err) => {
-      console.log('comp error: ', err.message);
+      console.log('b200 error: ', err.message);
+    });
+    this.port.on('close', (err) => {
+      console.log('b200 port closed');
+      if (err) {
+        console.log(err);
+      }
+      this.port.open();
     });
   }
 
