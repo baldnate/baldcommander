@@ -210,7 +210,7 @@ module.exports = [
     ],
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
-    ratio: '16x9',
+    ratio: '4x3',
     sourceName: 'hd_cap',
     crop: [0, 0, 0, 0], // [t,b,l,r]
   },
@@ -228,7 +228,7 @@ module.exports = [
     ],
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
-    ratio: '16x9',
+    ratio: '4x3',
     sourceName: 'hd_cap',
     crop: [0, 0, 0, 0], // [t,b,l,r]
   },
