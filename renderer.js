@@ -176,6 +176,12 @@ function muteNate() {
       item: 'fancy cam',
       visible: !nateMuted,
     });
+  obs.send('SetSceneItemProperties',
+    {
+      'scene-name': 'nateCam',
+      item: 'VCR text',
+      visible: !nateMuted,
+    });
 }
 
 document.querySelector('#nateMute').addEventListener(
