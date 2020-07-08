@@ -91,68 +91,26 @@ const scenes = [
   { scene: 'bald cinema', button: '#sceneCinema', transition: 'TBC - long' },
   { scene: 'intro 2', button: '#sceneIntro', transition: 'Cut' },
   { scene: 'VCR STOP', button: '#sceneVCRSTOP', transition: 'Cut' },
+  { scene: 'Game - 4x3', button: '#ratio-4x3', transition: 'TBC - short' },
+  { scene: 'Game - 16x9', button: '#ratio-16x9', transition: 'TBC - short' },
+  { scene: 'Game - tate', button: '#ratio-tate', transition: 'TBC - short' },
 ];
 
 for (let i = scenes.length - 1; i >= 0; i--) {
   registerScene(scenes[i]);
 }
 
-function buildSceneFromRatio(ratio) {
-  return `${ratio} frame`;
-}
-function buildVisibleSceneItemProps(ratio, source, cropData) {
-  return {
-    'scene-name': buildSceneFromRatio(ratio),
-    item: source,
-    crop: {
-      top: cropData[0],
-      bottom: cropData[1],
-      left: cropData[2],
-      right: cropData[3],
-    },
-    visible: true,
-  };
-}
-
-function buildHiddenSceneItemProps(ratio, source) {
-  return {
-    'scene-name': buildSceneFromRatio(ratio),
-    item: source,
-    visible: false,
-  };
-}
-
-function configureSources(ratio, activeSource, cropData) {
-  const sources = ['amarec_live', 'hd_cap'];
-  for (let i = 0; i < sources.length; i++) {
-    const source = sources[i];
-    let props;
-    if (source === activeSource) {
-      props = buildVisibleSceneItemProps(ratio, source, cropData);
-    } else {
-      props = buildHiddenSceneItemProps(ratio, source);
-    }
-    obs.send('SetSceneItemProperties', props);
-  }
-}
-
 function registerSwitchPort(portData) {
   document.querySelector(portData.button).addEventListener(
     'click',
     async () => {
-      toggleMute('VM B2 - Hybrid', false, true);
       swp123.sendCommands(portData.swp123);
       b200avmatrix.sendCommands(portData.comp);
       await sleep(300);
       dvs304.cmds(portData.dvs304);
-      switchScene(`Game - ${portData.ratio}`, 'TBC - short');
-      configureSources(portData.ratio, portData.sourceName, portData.crop);
-      await sleep(450);
-      toggleMute('VM B2 - Hybrid', false, false);
     },
   );
 }
-
 
 for (let i = consoleData.length - 1; i >= 0; i--) {
   registerSwitchPort(consoleData[i]);

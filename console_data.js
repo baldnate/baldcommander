@@ -19,16 +19,14 @@ module.exports = [
     swp123: [swp.vga(0), swp.svhs(0), swp.cvbs(1), swp.vga(4), swp.cvbs(1)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [0, 4, 39, 28], // [t,b,l,r]
   },
   {
     button: '#vidgen',
     dvs304: [
       '4&', // input select
       '9*0#',
-      '117)',
-      '12*610#',
+      '118)',
+      '12*604#',
       '115(',
       '13*451#',
       '11*800#',
@@ -37,8 +35,6 @@ module.exports = [
     swp123: [swp.vga(4), swp.svhs(0), swp.cvbs(3), swp.vga(4), swp.cvbs(3)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [18, 14, 41, 27], // [t,b,l,r]
   },
   {
     button: '#vidtg',
@@ -55,8 +51,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.svhs(0), swp.cvbs(4), swp.vga(4), swp.cvbs(4)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [4, 4, 33, 37], // [t,b,l,r]
   },
 
   // 240p - svid
@@ -76,8 +70,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(3), swp.vga(4), swp.svhs(3)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [16, 16, 36, 32], // [t,b,l,r]
   },
   {
     button: '#vidsgb',
@@ -95,8 +87,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(3), swp.vga(4), swp.svhs(3)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [94, 98, 143, 138], // [t,b,l,r]
   },
   {
     button: '#vidpsx',
@@ -114,8 +104,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(4), swp.vga(4), swp.svhs(4)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [0, 4, 35, 34], // [t,b,l,r]
   },
   {
     button: '#vidn64',
@@ -133,8 +121,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(2), swp.vga(4), swp.svhs(2)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [2, 4, 12, 12], // [t,b,l,r]
   },
 
   // 480i - svid - through DVS direct
@@ -152,8 +138,6 @@ module.exports = [
     comp: ['40\r'],
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(4), swp.vga(4), swp.svhs(4)],
     ratio: '4x3',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
   {
     button: '#vidn64-480i',
@@ -169,8 +153,6 @@ module.exports = [
     swp123: [swp.cvbs(0), swp.vga(4), swp.svhs(2)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 239, 243], // [t,b,l,r]
   },
 
   // swp.VGA
@@ -180,8 +162,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(3)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
 
   // vcr - comp
@@ -191,8 +171,6 @@ module.exports = [
     swp123: [swp.vga(4), swp.cvbs(2)],
     comp: ['40\r'],
     ratio: '4x3',
-    sourceName: 'amarec_live',
-    crop: [50, 46, 46, 40], // [t,b,l,r]
   },
 
   // XBOX
@@ -211,8 +189,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '4x3',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
   {
     button: '#vidxbox-480p-4-3',
@@ -229,8 +205,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '4x3',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
   {
     button: '#vidxbox-480p-16-9',
@@ -247,8 +221,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '16x9',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
   {
     button: '#vidxbox-720p',
@@ -265,8 +237,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '16x9',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
 
   // Wii
@@ -285,8 +255,6 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['42\r'],
     ratio: '16x9',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
   {
     button: '#vidwii-16x9-narrow',
@@ -303,7 +271,5 @@ module.exports = [
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['42\r'],
     ratio: '16x9',
-    sourceName: 'hd_cap',
-    crop: [0, 0, 0, 0], // [t,b,l,r]
   },
 ];
