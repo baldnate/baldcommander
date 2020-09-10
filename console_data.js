@@ -94,10 +94,10 @@ module.exports = [
       '4&', // input select
       '9*0#', // aspect ratio
       '124)', // H start
-      '102(', // V start
-      '11*807#', // total pixels
+      '131(', // V start
+      '11*798#', // total pixels
       '12*600#', // active pixels
-      '13*450#', // active lines
+      '13*478#', // active lines
       '127D', // detail filter
       '0U', // pixel phase
     ],
@@ -130,9 +130,9 @@ module.exports = [
       '3&', // input select
       '9*0#', // aspect ratio
       '57)', // H start
-      '72(', // V start
+      '80(', // V start
       '12*647#', // active pixels
-      '13*447#', // active lines
+      '13*463#', // active lines
       '127D', // detail filter
     ],
     comp: ['40\r'],
