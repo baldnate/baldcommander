@@ -140,6 +140,12 @@ function muteNate() {
       item: 'VCR text',
       visible: !nateMuted,
     });
+  obs.send('SetSceneItemProperties',
+    {
+      'scene-name': 'nateCam',
+      item: 'natecam bg color',
+      visible: !nateMuted,
+    });
 }
 
 document.querySelector('#nateMute').addEventListener(

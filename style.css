@@ -33,6 +33,10 @@ body {
   width: 53px;
 }
 
+.tiny {
+  width: 24px;
+}
+
 .spacer {
   background-color: #36393f;
   color: #36393f;

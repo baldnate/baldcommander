@@ -166,9 +166,18 @@ module.exports = [
 
   // vcr - comp
   {
-    button: '#vidsms',
-    dvs304: ['9*0#'],
-    swp123: [swp.vga(4), swp.cvbs(2)],
+    button: '#vidvcr',
+    dvs304: [
+      '4&', // input select
+      '9*0#',
+      '142)',
+      '12*624#',
+      '133(',
+      '13*480#',
+      '11*800#',
+      '42D',
+    ],
+    swp123: [swp.vga(0), swp.svhs(0), swp.cvbs(2), swp.vga(4), swp.cvbs(2)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -236,6 +245,59 @@ module.exports = [
     ],
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
+    ratio: '16x9',
+  },
+
+  {
+    button: '#viddvd',
+    dvs304: [
+      '2&', // input select
+      '9*0#', // aspect ratio
+      '128)', // H start
+      '128(', // V start
+      '11*863#', // total pixels
+      '12*725#', // active pixels
+      '13*480#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['44\r'],
+    ratio: '4x3',
+  },
+
+  // PS3
+  {
+    button: '#vidps3',
+    dvs304: [
+      '2&', // input select
+      '9*1#', // aspect ratio
+      '111)', // H start
+      '117(', // V start
+      '11*863#', // total pixels
+      '12*691#', // active pixels
+      '13*457#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['41\r'],
+    ratio: '16x9',
+  },
+
+  // 360
+  {
+    button: '#vid360',
+    dvs304: [
+      '2&', // input select
+      '9*1#', // aspect ratio
+      '111)', // H start
+      '117(', // V start
+      '11*863#', // total pixels
+      '12*691#', // active pixels
+      '13*457#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    comp: ['43\r'],
     ratio: '16x9',
   },
 
