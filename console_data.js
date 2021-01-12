@@ -172,9 +172,29 @@ module.exports = [
       '9*1#', // aspect ratio
       '175)', // H start
       '129(', // V start
+      '0U', // pixel phase
       '11*2200#', // total pixels
       '12*1921#', // active pixels
       '13*1076#', // active lines
+      '127D', // detail filter
+    ],
+    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
+    comp: ['40\r'],
+    ratio: '4x3',
+  },
+
+  // mister - neogeo
+  {
+    button: '#vidmisterneogeo',
+    dvs304: [
+      '4&', // input select
+      '9*1#', // aspect ratio
+      '119)', // H start
+      '119(', // V start
+      '29U', // pixel phase
+      '11*2200#', // total pixels
+      '12*2046#', // active pixels
+      '13*1080#', // active lines
       '127D', // detail filter
     ],
     swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
