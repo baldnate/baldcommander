@@ -181,7 +181,10 @@ swp123.sendCommands(
     '[VIN09-035]', // nes
     '[VIN11-140]', // gen
     '[VIN12-000]', // tg16 (noisy audio path)
-    '[VIN05-150]', // dc - WRONG NOW, UPDATE TO VGA AUDIO BANK
+    SWP123.vin('VGA', 1, '-640'), // Empty
+    SWP123.vin('VGA', 2, '000'), // MiSTer
+    SWP123.vin('VGA', 3, '-150'), // DC
+    SWP123.vin('VGA', 4, '000'), // DVS Output
     '[VIN08-135]', // psx
   ],
 );
