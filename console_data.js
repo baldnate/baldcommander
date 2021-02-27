@@ -16,7 +16,7 @@ module.exports = [
       '11*800#',
       '42D',
     ],
-    swp123: [swp.vga(0), swp.svhs(0), swp.cvbs(1), swp.vga(4), swp.cvbs(1)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.svhs(0), swp.cvbs(1), swp.vga(4), swp.cvbs(1)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -32,7 +32,7 @@ module.exports = [
       '11*800#',
       '42D',
     ],
-    swp123: [swp.vga(4), swp.svhs(0), swp.cvbs(3), swp.vga(4), swp.cvbs(3)],
+    swp123: [swp.vol('000'), swp.vga(4), swp.svhs(0), swp.cvbs(3), swp.vga(4), swp.cvbs(3)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -48,7 +48,7 @@ module.exports = [
       '11*800#',
       '42D',
     ],
-    swp123: [swp.vga(0), swp.svhs(0), swp.cvbs(4), swp.vga(4), swp.cvbs(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.svhs(0), swp.cvbs(4), swp.vga(4), swp.cvbs(4)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -67,7 +67,7 @@ module.exports = [
       '127D', // detail filter
       '26U', // pixel phase
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(3), swp.vga(4), swp.svhs(3)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(3), swp.vga(4), swp.svhs(3)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -84,7 +84,7 @@ module.exports = [
       '127D', // detail filter
       '26U', // pixel phase
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(3), swp.vga(4), swp.svhs(3)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(3), swp.vga(4), swp.svhs(3)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -101,7 +101,7 @@ module.exports = [
       '127D', // detail filter
       '0U', // pixel phase
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(4), swp.vga(4), swp.svhs(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(4), swp.vga(4), swp.svhs(4)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -118,7 +118,7 @@ module.exports = [
       '127D', // detail filter
       '29U', // pixel phase
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(2), swp.vga(4), swp.svhs(2)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(2), swp.vga(4), swp.svhs(2)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -136,7 +136,7 @@ module.exports = [
       '127D', // detail filter
     ],
     comp: ['40\r'],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(4), swp.vga(4), swp.svhs(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(4), swp.vga(4), swp.svhs(4)],
     ratio: '4x3',
   },
   {
@@ -150,7 +150,7 @@ module.exports = [
       '13*465#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.cvbs(0), swp.vga(4), swp.svhs(2)],
+    swp123: [swp.vol('000'), swp.cvbs(0), swp.vga(4), swp.svhs(2)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -159,7 +159,7 @@ module.exports = [
   {
     button: '#viddc',
     dvs304: ['9*0#'],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(3)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(3)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -178,7 +178,7 @@ module.exports = [
       '13*1076#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -197,7 +197,7 @@ module.exports = [
       '13*1080#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -215,7 +215,7 @@ module.exports = [
       '11*800#',
       '42D',
     ],
-    swp123: [swp.vga(0), swp.svhs(0), swp.cvbs(2), swp.vga(4), swp.cvbs(2)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.svhs(0), swp.cvbs(2), swp.vga(4), swp.cvbs(2)],
     comp: ['40\r'],
     ratio: '4x3',
   },
@@ -233,7 +233,7 @@ module.exports = [
       '13*457#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '4x3',
   },
@@ -249,7 +249,7 @@ module.exports = [
       '13*480#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '4x3',
   },
@@ -265,7 +265,7 @@ module.exports = [
       '13*480#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '16x9',
   },
@@ -281,7 +281,7 @@ module.exports = [
       '13*720#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['46\r'],
     ratio: '16x9',
   },
@@ -290,15 +290,15 @@ module.exports = [
     button: '#viddvd',
     dvs304: [
       '2&', // input select
-      '9*0#', // aspect ratio
-      '128)', // H start
-      '128(', // V start
-      '11*863#', // total pixels
-      '12*725#', // active pixels
-      '13*480#', // active lines
-      '127D', // detail filter
+      '9*1#', // aspect ratio
+      '43)', // H start
+      '67(', // V start
+      // '11*863#', // total pixels
+      '12*636#', // active pixels
+      '13*522#', // active lines
+      '64D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('-275'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['44\r'],
     ratio: '4x3',
   },
@@ -316,7 +316,7 @@ module.exports = [
       '13*457#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['41\r'],
     ratio: '16x9',
   },
@@ -334,7 +334,7 @@ module.exports = [
       '13*457#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['43\r'],
     ratio: '16x9',
   },
@@ -345,14 +345,14 @@ module.exports = [
     dvs304: [
       '2&', // input select
       '9*1#', // aspect ratio
-      '111)', // H start
-      '117(', // V start
+      '110)', // H start
+      '116(', // V start
       '11*863#', // total pixels
-      '12*691#', // active pixels
-      '13*457#', // active lines
+      '12*678#', // active pixels
+      '13*455#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('-300'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['42\r'],
     ratio: '16x9',
   },
@@ -368,7 +368,7 @@ module.exports = [
       '13*481#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('-150'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['42\r'],
     ratio: '16x9',
   },
