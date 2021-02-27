@@ -4,6 +4,7 @@
 
 const electron = require('electron');
 const OBSWebSocket = require('obs-websocket-js');
+const electronLocalshortcut = require('electron-localshortcut');
 const consoleData = require('./console_data');
 const SWP123 = require('./swp123');
 const DVS304 = require('./dvs304');
@@ -47,12 +48,19 @@ function switchScene(scene, transition) {
 }
 
 function registerScene(sceneData) {
-  document.querySelector(sceneData.button).addEventListener(
-    'click',
-    () => {
+  if (sceneData.button) {
+    document.querySelector(sceneData.button).addEventListener(
+      'click',
+      () => {
+        switchScene(sceneData.scene, sceneData.transition);
+      },
+    );
+  }
+  if (sceneData.hotkey) {
+    electronLocalshortcut.register(electron.remote.getCurrentWindow(), sceneData.hotkey, () => {
       switchScene(sceneData.scene, sceneData.transition);
-    },
-  );
+    });
+  }
 }
 
 function updateButton(button, state, trueStyle, falseStyle) {
@@ -85,15 +93,35 @@ function toggleStartRecording(source, button) {
 }
 
 const scenes = [
-  { scene: 'brb 2', button: '#sceneBRB', transition: 'TBC - short' },
-  { scene: 'station id', button: '#sceneOutro', transition: 'TBC - short' },
-  { scene: 'traffic', button: '#sceneVortex', transition: 'TBC - short' },
-  { scene: 'bald cinema', button: '#sceneCinema', transition: 'TBC - long' },
-  { scene: 'intro 2', button: '#sceneIntro', transition: 'Cut' },
-  { scene: 'VCR STOP', button: '#sceneVCRSTOP', transition: 'Cut' },
-  { scene: 'Game - 4x3', button: '#ratio-4x3', transition: 'TBC - short' },
-  { scene: 'Game - 16x9', button: '#ratio-16x9', transition: 'TBC - short' },
-  { scene: 'Game - tate', button: '#ratio-tate', transition: 'TBC - short' },
+  {
+    scene: 'brb 2', button: '#sceneBRB', transition: 'TBC - short', hotkey: 'Ctrl+1',
+  }, {
+    scene: 'station id', button: '#sceneOutro', transition: 'TBC - short', hotkey: null,
+  }, {
+    scene: 'traffic', button: '#sceneVortex', transition: 'TBC - short', hotkey: null,
+  }, {
+    scene: 'bald cinema', button: '#sceneCinema', transition: 'TBC - long', hotkey: 'Ctrl+2',
+  }, {
+    scene: 'intro 2', button: '#sceneIntro', transition: 'Cut', hotkey: null,
+  }, {
+    scene: 'VCR STOP', button: '#sceneVCRSTOP', transition: 'Cut', hotkey: null,
+  }, {
+    scene: 'Game - 4x3', button: '#ratio-4x3', transition: 'TBC - short', hotkey: 'Ctrl+3',
+  }, {
+    scene: 'Game - 16x9', button: '#ratio-16x9', transition: 'TBC - short', hotkey: 'Ctrl+4',
+  }, {
+    scene: 'Game - tate', button: '#ratio-tate', transition: 'TBC - short', hotkey: 'Ctrl+5',
+  }, {
+    scene: 'Game - 3x2', button: null, transition: 'TBC - short', hotkey: 'Ctrl+6',
+  }, {
+    scene: 'Game - Mister 1:1.11', button: null, transition: 'TBC - short', hotkey: 'Ctrl+7',
+  }, {
+    scene: 'big cam', button: null, transition: 'TBC - short', hotkey: 'Ctrl+8',
+  }, {
+    scene: 'desk cam', button: null, transition: 'TBC - short', hotkey: 'Ctrl+9',
+  }, {
+    scene: 'Frame Counting', button: null, transition: 'TBC - short', hotkey: 'Ctrl+0',
+  },
 ];
 
 for (let i = scenes.length - 1; i >= 0; i--) {
