@@ -94,23 +94,23 @@ function toggleStartRecording(source, button) {
 
 const scenes = [
   {
-    scene: 'brb 2', button: '#sceneBRB', transition: 'TBC - short', hotkey: 'Ctrl+1',
+    scene: 'brb 2', button: null, transition: 'TBC - short', hotkey: 'Ctrl+1',
   }, {
     scene: 'station id', button: '#sceneOutro', transition: 'TBC - short', hotkey: null,
   }, {
-    scene: 'traffic', button: '#sceneVortex', transition: 'TBC - short', hotkey: null,
+    scene: 'traffic', button: null, transition: 'TBC - short', hotkey: null,
   }, {
-    scene: 'bald cinema', button: '#sceneCinema', transition: 'TBC - long', hotkey: 'Ctrl+2',
+    scene: 'bald cinema', button: null, transition: 'TBC - long', hotkey: 'Ctrl+2',
+  // }, {
+  //   scene: 'intro 2', button: '#sceneIntro', transition: 'Cut', hotkey: null,
   }, {
-    scene: 'intro 2', button: '#sceneIntro', transition: 'Cut', hotkey: null,
+    scene: 'VCR STOP', button: null, transition: 'Cut', hotkey: null,
   }, {
-    scene: 'VCR STOP', button: '#sceneVCRSTOP', transition: 'Cut', hotkey: null,
+    scene: 'Game - 4x3', button: null, transition: 'TBC - short', hotkey: 'Ctrl+3',
   }, {
-    scene: 'Game - 4x3', button: '#ratio-4x3', transition: 'TBC - short', hotkey: 'Ctrl+3',
+    scene: 'Game - 16x9', button: null, transition: 'TBC - short', hotkey: 'Ctrl+4',
   }, {
-    scene: 'Game - 16x9', button: '#ratio-16x9', transition: 'TBC - short', hotkey: 'Ctrl+4',
-  }, {
-    scene: 'Game - tate', button: '#ratio-tate', transition: 'TBC - short', hotkey: 'Ctrl+5',
+    scene: 'Game - tate', button: null, transition: 'TBC - short', hotkey: 'Ctrl+5',
   }, {
     scene: 'Game - 3x2', button: null, transition: 'TBC - short', hotkey: 'Ctrl+6',
   }, {
@@ -127,6 +127,30 @@ const scenes = [
 for (let i = scenes.length - 1; i >= 0; i--) {
   registerScene(scenes[i]);
 }
+
+function introSequence() {
+  const trafficDuration = 3 * 60 * 1000;
+  const testpatternDuration = 2500;
+  const introDuration = 29 * 1000;
+  switchScene('traffic', 'Cut');
+  setTimeout(() => {
+    switchScene('VCR STOP', 'Cut');
+  }, trafficDuration);
+  setTimeout(() => {
+    switchScene('intro 2', 'Cut');
+  }, trafficDuration + testpatternDuration);
+  setTimeout(() => {
+    switchScene('big cam', 'TBC - short');
+  }, trafficDuration + testpatternDuration + introDuration);
+}
+
+document.querySelector('#sceneIntro').addEventListener(
+  'click',
+  () => {
+    introSequence();
+  },
+);
+
 
 function registerSwitchPort(portData) {
   document.querySelector(portData.button).addEventListener(
