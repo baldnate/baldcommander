@@ -368,7 +368,7 @@ module.exports = [
       '13*481#', // active lines
       '127D', // detail filter
     ],
-    swp123: [swp.vol('-150'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
+    swp123: [swp.vol('-300'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(4)],
     comp: ['42\r'],
     ratio: '16x9',
   },
