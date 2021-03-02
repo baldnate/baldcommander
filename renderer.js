@@ -96,13 +96,9 @@ const scenes = [
   {
     scene: 'brb 2', button: null, transition: 'TBC - short', hotkey: 'Ctrl+1',
   }, {
-    scene: 'station id', button: '#sceneOutro', transition: 'TBC - short', hotkey: null,
-  }, {
     scene: 'traffic', button: null, transition: 'TBC - short', hotkey: null,
   }, {
     scene: 'bald cinema', button: null, transition: 'TBC - long', hotkey: 'Ctrl+2',
-  // }, {
-  //   scene: 'intro 2', button: '#sceneIntro', transition: 'Cut', hotkey: null,
   }, {
     scene: 'VCR STOP', button: null, transition: 'Cut', hotkey: null,
   }, {
@@ -144,6 +140,14 @@ function introSequence() {
   }, trafficDuration + testpatternDuration + introDuration);
 }
 
+function outroSequence() {
+  const stationIDDuration = 59 * 1000;
+  switchScene('station id', 'TBC - short');
+  setTimeout(() => {
+    switchScene('VCR STOP', 'Cut');
+  }, stationIDDuration);
+}
+
 document.querySelector('#sceneIntro').addEventListener(
   'click',
   () => {
@@ -151,6 +155,12 @@ document.querySelector('#sceneIntro').addEventListener(
   },
 );
 
+document.querySelector('#sceneOutro').addEventListener(
+  'click',
+  () => {
+    outroSequence();
+  },
+);
 
 function registerSwitchPort(portData) {
   document.querySelector(portData.button).addEventListener(
