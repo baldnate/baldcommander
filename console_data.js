@@ -175,7 +175,7 @@ module.exports = [
       '0U', // pixel phase
       '11*2200#', // total pixels
       '12*1921#', // active pixels
-      '13*1076#', // active lines
+      '13*1080#', // active lines
       '127D', // detail filter
     ],
     swp123: [swp.vol('000'), swp.vga(0), swp.cvbs(0), swp.svhs(0), swp.vga(2)],
